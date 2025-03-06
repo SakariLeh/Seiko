@@ -122,7 +122,6 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: start;
-    /* Оставляем контент сверху */
     height: 100vh;
     padding: env(safe-area-inset-top, 10px) 16px 16px;
 }
@@ -245,18 +244,14 @@ main {
 .order-details {
     display: flex;
     justify-content: space-between;
-    /* Растягиваем элементы по краям */
     width: 100%;
-    /* Обеспечиваем растяжение на всю ширину блока */
     margin-top: 5px;
-    /* Добавляем немного отступа сверху */
 }
 
 .order-details p {
     font-weight: 700;
     font-size: 11px;
     margin: 0;
-    /* Убираем отступы у параграфов */
 }
 
 .order-details span {
