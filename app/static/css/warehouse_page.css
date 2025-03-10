@@ -1,0 +1,188 @@
+/* Подключение шрифтов */
+
+@font-face {
+    font-family: 'Futura New';
+    src: url('/fonts/FuturaNewLight-Reg.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura New';
+    src: url('/fonts/FuturaNewBook-Reg.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura New';
+    src: url('/fonts/FuturaNewMedium-Reg.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura New';
+    src: url('/fonts/FuturaNewDemi-Reg.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura New';
+    src: url('/fonts/FuturaNewBold-Reg.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Futura New', sans-serif;
+}
+
+body {
+    background-color: #fff;
+    padding: 10px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.header a {
+    text-decoration: none;
+    color: black;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+.header-title {
+    font-weight: 500;
+    font-size: 24px;
+}
+
+.stock-info {
+    background: #1E4D91;
+    color: white;
+    font-size: 22px;
+    font-weight: 700;
+    padding: 10px 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.stock-info span {
+    font-weight: 800;
+    font-size: 48px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background: #f5f5f5;
+    padding: 8px;
+    border-radius: 10px;
+    margin: 16px 0;
+    border: 1px solid #ddd;
+}
+
+.title {
+    margin-top: 16px;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.search-box input {
+    border: none;
+    background: transparent;
+    outline: none;
+    flex: 1;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.search-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.product {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+}
+
+.info-contant {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.info-left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 50px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+.info-left p {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.info-right {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 12px;
+    padding: 3px 12px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.product-title {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.product-desc {
+    font-size: 11px;
+    font-weight: 400;
+}
+
+.product-status {
+    font-size: 11px;
+    font-weight: 600;
+    color: #3D7B3A;
+}
+
+.product-status-warn {
+    color: #D20000;
+}
+
+.product-add {
+    font-size: 24px;
+    font-weight: bold;
+}

@@ -1,0 +1,270 @@
+@font-face {
+    font-family: 'Futura New';
+    src: url('/fonts/FuturaNewLight-Reg.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura New';
+    src: url('/fonts/FuturaNewLight-Obl.woff2') format('woff2');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Futura New';
+    src: url('/fonts/FuturaNewBook-Reg.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura New';
+    src: url('/fonts/FuturaNewBook-Obl.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Futura New';
+    src: url('/fonts/FuturaNewMedium-Reg.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura New';
+    src: url('/fonts/FuturaNewMedium-Obl.woff2') format('woff2');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Futura New';
+    src: url('/fonts/FuturaNewDemi-Reg.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura New';
+    src: url('/fonts/FuturaNewDemi-Obl.woff2') format('woff2');
+    font-weight: 600;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Futura New';
+    src: url('/fonts/FuturaNewBold-Reg.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura New';
+    src: url('/fonts/FuturaNewBold-Obl.woff2') format('woff2');
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Futura New';
+    src: url('/fonts/FuturaNewExtraBold-Reg.woff2') format('woff2');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura New';
+    src: url('/fonts/FuturaNewExtraBold-Obl.woff2') format('woff2');
+    font-weight: 800;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Futura New';
+    src: url('/fonts/FuturaNewHeavy-Reg.woff2') format('woff2');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura New';
+    src: url('/fonts/FuturaNewHeavy-Obl.woff2') format('woff2');
+    font-weight: 900;
+    font-style: italic;
+}
+
+:root {
+    --tg-bg: var(--tg-theme-bg-color, #ffffff);
+    --tg-text: var(--tg-theme-text-color, #000000);
+    --tg-button: #D4A837;
+    /* Цвет кнопки из макета */
+    --tg-button-text: #000000;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Futura New', sans-serif;
+    font-weight: 400;
+}
+
+
+/* Основные стили */
+
+body {
+    background-color: var(--tg-bg);
+    color: var(--tg-text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    /* Оставляем контент сверху */
+    height: 100vh;
+    padding: env(safe-area-inset-top, 10px) 16px 16px;
+}
+
+
+/* Логотип */
+
+.logo {
+    max-width: 60%;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+/* Основной контейнер */
+
+main {
+    width: 350px;
+    /* Растягиваем main */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 60%;
+    /* Опускаем main ниже, чтобы logo было видно */
+}
+
+
+/* Карточка профиля */
+
+.profile-card {
+    width: 100%;
+    background-color: #2C4E94;
+    color: white;
+    padding: 16px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-info h2 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.profile-info h3 {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.profile-icon img {
+    width: 50px;
+}
+
+.verified img {
+    width: 20px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+
+/* Меню */
+
+.menu {
+    margin-top: 15px;
+    width: 100%;
+}
+
+.menu-btn {
+    background: white;
+    border: none;
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    text-decoration: none;
+    font-weight: 500;
+    color: #2C4E94;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+.menu-btn img {
+    width: 20px;
+}
+
+.menu-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.menu-row .menu-btn {
+    width: 48%;
+}
+
+.orders {
+    width: 100%;
+}
+
+.order {
+    width: 100%;
+    background-color: white;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.order-details {
+    display: flex;
+    justify-content: space-between;
+    /* Растягиваем элементы по краям */
+    width: 100%;
+    /* Обеспечиваем растяжение на всю ширину блока */
+    margin-top: 5px;
+    /* Добавляем немного отступа сверху */
+}
+
+.order-details p {
+    font-weight: 700;
+    font-size: 11px;
+    margin: 0;
+    /* Убираем отступы у параграфов */
+}
+
+.order-details span {
+    font-size: 11px;
+    font-weight: 400;
+}
+
+.order strong {
+    font-size: 15px;
+    font-weight: 700;
+}

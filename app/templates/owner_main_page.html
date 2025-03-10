@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vision Trend</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/partner_main_page.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+</head>
+
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Vision Trend" class="logo owner-logo">
+        <a href="{{ url_for('auth.logout') }}" class="logout-btn"><i class="bi bi-box-arrow-right"></i></a>
+    </header>
+
+    <main>
+        <section class="profile-card">
+            <div class="profile-info">
+                <p>{{ role_title }}:</p>
+                <h2>{{ user_name }}</h2>
+                {% if role == 'admin' or role == 'support' %}
+                <p>Компания:</p>
+                <h3>{{ company_name }}</h3>
+                {% elif role == 'store' %}
+                <p>Партнер:</p>
+                <h3>{{ company_name }}</h3>
+                {% elif role == 'branch' %}
+                <p>Отдел партнера:</p>
+                <h3>{{ company_name }} ({{ location }})</h3>
+                {% endif %}
+            </div>
+            <div class="profile-icon">
+                <img src="{{ url_for('static', filename='img/icon-user.png') }}" alt="Профиль">
+            </div>
+            <div class="verified">
+                <img src="{{ url_for('static', filename='img/check-icon.png') }}" alt="Подтверждено">
+            </div>
+        </section>
+
+        <nav class="menu">
+            <a href="{{ url_for('dashboard.communication') }}" class="menu-btn">
+                <img src="{{ url_for('static', filename='img/chat-icon.png') }}" alt="Коммуникация"> Коммуникация
+            </a>
+            <div class="menu-row">
+                <a href="{{ url_for('dashboard.storage') }}" class="menu-btn">
+                    <img src="{{ url_for('static', filename='img/storage-icon.png') }}" alt="Склад"> Склад
+                </a>
+                <a href="{{ url_for('dashboard.news') }}" class="menu-btn">
+                    <img src="{{ url_for('static', filename='img/news-icon.png') }}" alt="Новости"> Новости
+                </a>
+            </div>
+
+            {% if role == 'admin' %}
+            <a href="{{ url_for('dashboard.manage_users') }}" class="menu-btn admin-only">
+                <img src="{{ url_for('static', filename='img/users-icon.png') }}" alt="Управление пользователями"> Управление пользователями
+            </a>
+            {% endif %}
+
+            <a href="{{ url_for('dashboard.order') }}" class="menu-btn">
+                <img src="{{ url_for('static', filename='img/buy.png') }}" alt="Заказать"> Заказать
+            </a>
+            <a href="{{ url_for('dashboard.order_history') }}" class="menu-btn">
+                <img src="{{ url_for('static', filename='img/history-icon.png') }}" alt="История"> История заказов
+            </a>
+
+            {% if role == 'admin' or role == 'support' %}
+            <a href="{{ url_for('dashboard.analytics') }}" class="menu-btn">
+                <img src="{{ url_for('static', filename='img/analytics-icon.png') }}" alt="Аналитика"> Аналитика
+            </a>
+            {% endif %}
+        </nav>
+
+        <section class="orders">
+            <h3>Недавние заказы:</h3>
+            {% if recent_orders %}
+                {% for order in recent_orders %}
+                <div class="order">
+                    <strong>Заказ №{{ order.id }}</strong>
+                    <div class="order-details">
+                        <p>Статус: <span class="status {{ order.status_class }}">{{ order.status_text }}</span></p>
+                        {% if role == 'admin' or role == 'support' %}
+                        <p>Заказчик: {{ order.customer }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-orders">У вас пока нет заказов</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Развернуть Mini App
+    </script>
+</body>
+
+</html>
