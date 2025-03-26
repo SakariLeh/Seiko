@@ -22,7 +22,7 @@ def phone_validation():
     phone = phone.replace(' ', '').replace('(', '').replace(')', '').replace('-', '').replace('+', '')
 
     if not validate_phone(phone):
-        return render_template('index.html', error='Введите корректный номер телефона в формате 7XXXXXXXXXX',
+        return render_template('index.html', error='Введите корректный номер телефона в формате 998XXXXXXXXX',
                                phone=phone)
 
     # Сохраняем телефон в сессии

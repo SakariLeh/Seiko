@@ -4,111 +4,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Коммуникация</title>
-    <link rel="stylesheet" href="../css/warehouse_page.css">
+    <title>Склад</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/warehouse_page.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
 
     <div class="header">
-        <a href="#"><i class="bi bi-arrow-left"></i></a>
+        <a href="{{ url_for('dashboard.index') }}"><i class="bi bi-arrow-left"></i></a>
         <span class="header-title">Склад</span>
     </div>
 
     <div class="stock-info">
-        <span>105</span> единиц товара на складе
+        <span>{{ total_items }}</span> единиц товара на складе
     </div>
 
     <div class="search-box">
-        <input type="text" placeholder="Поиск">
+        <input type="text" id="search-input" placeholder="Поиск">
         <button class="search-btn"><i class="bi bi-search"></i></button>
     </div>
 
     <p class="title">Весь товар:</p>
 
     <div class="product-list">
-        <div class="product">
+        {% for product in products %}
+        <div class="product" data-product-id="{{ product.id }}" data-product-name="{{ product.name }}" data-product-category="{{ product.category }}" data-product-manufacturer="{{ product.manufacturer }}">
             <div class="info-left">
                 <p>
-                    24 шт
+                    {{ product.quantity }} шт
                 </p>
             </div>
             <div class="info-right">
                 <div class="info-contant">
-                    <div class="product-title">A-ZONE 1.67 BASE 5/3</div>
-                    <div class="product-desc">Seiko / ... / Биасферические</div>
-                    <div class="product-status">Есть в наличии</div>
+                    <div class="product-title">{{ product.name }}</div>
+                    <div class="product-desc">{{ product.description }}</div>
+                    <div class="product-status {% if not product.available %}product-status-warn{% endif %}">
+                        {% if product.available %}Есть в наличии{% else %}Нет в наличии{% endif %}
+                    </div>
                 </div>
-                <div class="product-add"><i class="bi bi-plus"></i></div>
+                <div class="product-add" {% if not product.available %}style="opacity: 0.5; cursor: not-allowed;"{% endif %}>
+                    <i class="bi bi-plus"></i>
+                </div>
             </div>
         </div>
-        <div class="product">
-            <div class="info-left">
-                <p>
-                    24 шт
-                </p>
-            </div>
-            <div class="info-right">
-                <div class="info-contant">
-                    <div class="product-title">A-ZONE 1.67 BASE 5/3</div>
-                    <div class="product-desc">Seiko / ... / Биасферические</div>
-                    <div class="product-status">Есть в наличии</div>
+        {% endfor %}
+    </div>
+
+    <!-- Модальное окно бронирования -->
+    <div id="reservationModal" class="modal" style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
+        <div class="modal-content" style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; border-radius: 8px;">
+            <span class="close" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            <h2>Бронирование товара</h2>
+            <form id="reservationForm">
+                <input type="hidden" id="product_id" name="product_id">
+
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="product_name" style="display: block; margin-bottom: 5px;">Товар:</label>
+                    <input type="text" id="product_name" readonly style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
                 </div>
-                <div class="product-add"><i class="bi bi-plus"></i></div>
-            </div>
-        </div>
-        <div class="product">
-            <div class="info-left">
-                <p>
-                    24 шт
-                </p>
-            </div>
-            <div class="info-right">
-                <div class="info-contant">
-                    <div class="product-title">A-ZONE 1.67 BASE 5/3</div>
-                    <div class="product-desc">Seiko / ... / Биасферические</div>
-                    <div class="product-status">Есть в наличии</div>
+
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="quantity" style="display: block; margin-bottom: 5px;">Количество:</label>
+                    <input type="number" id="quantity" name="quantity" min="1" value="1" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
                 </div>
-                <div class="product-add"><i class="bi bi-plus"></i></div>
-            </div>
-        </div>
-        <div class="product">
-            <div class="info-left">
-                <p>
-                    24 шт
-                </p>
-            </div>
-            <div class="info-right">
-                <div class="info-contant">
-                    <div class="product-title">A-ZONE 1.67 BASE 5/3</div>
-                    <div class="product-desc">Seiko / ... / Биасферические</div>
-                    <div class="product-status">Есть в наличии</div>
+
+                {% if role in ['admin', 'support'] %}
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="company" style="display: block; margin-bottom: 5px;">Компания:</label>
+                    <select id="company" name="company" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
+                        <option value="NabievOptics">NabievOptics</option>
+                        <option value="Оптика+">Оптика+</option>
+                        <!-- В реальном приложении список компаний будет загружаться из базы данных -->
+                    </select>
                 </div>
-                <div class="product-add"><i class="bi bi-plus"></i></div>
-            </div>
-        </div>
-        <div class="product">
-            <div class="info-left">
-                <p>
-                    0 шт
-                </p>
-            </div>
-            <div class="info-right">
-                <div class="info-contant">
-                    <div class="product-title">A-ZONE 1.67 BASE 5/3</div>
-                    <div class="product-desc">Seiko / ... / Биасферические</div>
-                    <div class="product-status product-status-warn">Нет в наличии</div>
+
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="location" style="display: block; margin-bottom: 5px;">Отделение:</label>
+                    <select id="location" name="location" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
+                        <option value="">Головной офис</option>
+                        <option value="ТЦ Галерея">ТЦ Галерея</option>
+                        <option value="ТЦ Мега">ТЦ Мега</option>
+                        <!-- В реальном приложении список отделений будет загружаться из базы данных -->
+                    </select>
                 </div>
-                <div class="product-add"><i class="bi bi-plus"></i></div>
-            </div>
+                {% elif role == 'store' %}
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="location" style="display: block; margin-bottom: 5px;">Отделение:</label>
+                    <select id="location" name="location" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
+                        <option value="">Головной офис</option>
+                        <option value="ТЦ Галерея">ТЦ Галерея</option>
+                        <option value="ТЦ Мега">ТЦ Мега</option>
+                        <!-- В реальном приложении список отделений компании будет загружаться из базы данных -->
+                    </select>
+                </div>
+                <input type="hidden" name="company" value="{{ company }}">
+                {% else %}
+                <input type="hidden" name="location" value="{{ location }}">
+                <input type="hidden" name="company" value="{{ company }}">
+                {% endif %}
+
+                <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%;">Забронировать</button>
+            </form>
         </div>
     </div>
 
+    <script>
+        $(document).ready(function() {
+            // Поиск по товарам
+            $("#search-input").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $(".product").filter(function() {
+                    var productName = $(this).data("product-name").toLowerCase();
+                    var productCategory = $(this).data("product-category").toLowerCase();
+                    var productManufacturer = $(this).data("product-manufacturer").toLowerCase();
+                    var searchText = productName + " " + productCategory + " " + productManufacturer;
+                    $(this).toggle(searchText.indexOf(value) > -1);
+                });
+            });
 
+            // Открытие модального окна при нажатии на "+"
+            $(".product-add").on("click", function() {
+                var product = $(this).closest(".product");
+                var productId = product.data("product-id");
+                var productName = product.data("product-name");
+                var isAvailable = !product.find(".product-status").hasClass("product-status-warn");
 
+                if (!isAvailable) {
+                    alert("Товар не доступен для бронирования");
+                    return;
+                }
 
+                $("#product_id").val(productId);
+                $("#product_name").val(productName);
+                $("#reservationModal").show();
+            });
 
+            // Закрытие модального окна
+            $(".close").on("click", function() {
+                $("#reservationModal").hide();
+            });
+
+            // Закрытие модального окна при клике вне его области
+            $(window).on("click", function(event) {
+                if ($(event.target).is("#reservationModal")) {
+                    $("#reservationModal").hide();
+                }
+            });
+
+            // Отправка формы бронирования
+            $("#reservationForm").on("submit", function(e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: "{{ url_for('dashboard.reserve_product') }}",
+                    type: "POST",
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message);
+                            $("#reservationModal").hide();
+                            // Перезагружаем страницу для обновления данных
+                            location.reload();
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert("Произошла ошибка при отправке запроса");
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

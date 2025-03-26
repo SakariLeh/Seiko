@@ -1,105 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/vision_trend_support_chat.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/vision_trend_support_chat.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <title>Chat</title>
+    <title>{{ chat_title }}</title>
 </head>
 
 <body>
     <div class="chat-container">
         <header class="chat-header">
-            <button class="back-button">←</button>
+            <a href="{{ url_for('dashboard.communication') }}" class="back-button">←</a>
             <div class="chat-info">
-                <div class="avatar">VT</div>
+                <div class="avatar">{{ chat_avatar_initials }}</div>
                 <div>
-                    <h1>VisionTrend Support</h1>
-                    <p>Группа</p>
+                    <h1>{{ chat_title }}</h1>
+                    <p>{{ chat_type }}</p>
                 </div>
             </div>
         </header>
 
         <div class="chat-messages">
-            <!-- Сообщения VT -->
-            <div class="message received">
-                <div class="avatar">VT</div>
-                <div class="bubble">Здравствуйте! Как мы можем вам помочь?</div>
-            </div>
-            <div class="message received">
-                <div class="avatar">VT</div>
-                <div class="bubble">У вас есть вопросы по нашему сервису?</div>
-            </div>
-
-            <!-- Сообщения пользователя -->
-            <div class="message sent">
-                <div class="bubble">Привет! Да, у меня есть вопрос.</div>
-            </div>
-            <div class="message sent">
-                <div class="bubble">Какие способы оплаты у вас есть?</div>
-            </div>
-
-            <!-- Сообщения VT -->
-            <div class="message received">
-                <div class="avatar">VT</div>
-                <div class="bubble">Мы принимаем карты Visa, MasterCard и PayPal.</div>
-            </div>
-            <div class="message received">
-                <div class="avatar">VT</div>
-                <div class="bubble">Также возможен перевод через банковский счёт.</div>
-            </div>
-
-            <!-- Длинный диалог для прокрутки -->
-            <div class="message sent">
-                <div class="bubble">Отлично, спасибо!</div>
-            </div>
-            <div class="message sent">
-                <div class="bubble">Как долго обрабатывается заказ?</div>
-            </div>
-            <div class="message received">
-                <div class="avatar">VT</div>
-                <div class="bubble">Заказы обрабатываются в течение 1-2 рабочих дней.</div>
-            </div>
-            <div class="message received">
-                <div class="avatar">VT</div>
-                <div class="bubble">После этого мы отправляем вам трек-номер.</div>
-            </div>
-            <div class="message sent">
-                <div class="bubble">Понял! Спасибо за информацию!</div>
-            </div>
-            <div class="message received">
-                <div class="avatar">VT</div>
-                <div class="bubble">После этого мы отправляем вам трек-номер.</div>
-            </div>
-            <div class="message sent">
-                <div class="bubble">Понял! Спасибо за информацию!</div>
-            </div>
-            <div class="message received">
-                <div class="avatar">VT</div>
-                <div class="bubble">После этого мы отправляем вам трек-номер.</div>
-            </div>
-            <div class="message sent">
-                <div class="bubble">Понял! Спасибо за информацию!</div>
-            </div>
-            <div class="message received">
-                <div class="avatar">VT</div>
-                <div class="bubble">После этого мы отправляем вам трек-номер.</div>
-            </div>
-            <div class="message sent">
-                <div class="bubble">Понял! Спасибо за информацию!</div>
-            </div>
+            {% for message in messages %}
+                {% if message.user_id == current_user_id %}
+                    <div class="message sent">
+                        <div class="bubble">{{ message.text }}</div>
+                        <span class="message-time">{{ message.timestamp.strftime('%H:%M') }}</span>
+                    </div>
+                {% else %}
+                    <div class="message received">
+                        <div class="avatar">{{ message.user_avatar_initials }}</div>
+                        <div class="bubble">{{ message.text }}</div>
+                        <span class="message-time">{{ message.timestamp.strftime('%H:%M') }}</span>
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
 
         <div class="chat-footer">
-            <input type="text" placeholder="Напишите сообщение..." />
-            <button class="attach-button"><i class="bi bi-images"></i></button>
-            <button class="send-button"><i class="bi bi-send-fill"></i></button>
+            <form method="POST" action="{{ url_for('dashboard.send_message', chat_id=chat_id) }}">
+                <input type="text" name="message" placeholder="Напишите сообщение..." required />
+                <button type="button" class="attach-button"><i class="bi bi-images"></i></button>
+                <button type="submit" class="send-button"><i class="bi bi-send-fill"></i></button>
+            </form>
         </div>
     </div>
 
-
+    <script>
+        // Прокрутка до последнего сообщения при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.querySelector('.chat-messages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+    </script>
 </body>
 
 </html>

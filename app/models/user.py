@@ -23,28 +23,28 @@ class User:
         test_users = {
             '998901234567': {
                 'password': '1234',
-                'role': 'admin',
+                'role': 'admin',    # Владелец
                 'name': 'Adam Lumberg',
                 'company': 'NabievOptics',
                 'location': None
             },
             '998907654321': {
                 'password': '5678',
-                'role': 'support',
+                'role': 'support',  # Сотрудники владельца
                 'name': 'Ivan Petrov',
                 'company': 'NabievOptics',
                 'location': None
             },
             '998909876543': {
                 'password': '4321',
-                'role': 'store',
+                'role': 'store',    # Владелец компании-партнёра
                 'name': 'Marina Volkova',
                 'company': 'Оптика+',
                 'location': None
             },
             '998903456789': {
                 'password': '9876',
-                'role': 'branch',
+                'role': 'branch',   # Сотрудник(филиал) компании-партнёра
                 'name': 'Sergey Sidorov',
                 'company': 'Оптика+',
                 'location': 'ТЦ Галерея'

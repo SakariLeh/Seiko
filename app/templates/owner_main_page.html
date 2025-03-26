@@ -64,12 +64,6 @@
             <a href="{{ url_for('dashboard.order_history') }}" class="menu-btn">
                 <img src="{{ url_for('static', filename='img/history-icon.png') }}" alt="История"> История заказов
             </a>
-
-            {% if role == 'admin' or role == 'support' %}
-            <a href="{{ url_for('dashboard.analytics') }}" class="menu-btn">
-                <img src="{{ url_for('static', filename='img/analytics-icon.png') }}" alt="Аналитика"> Аналитика
-            </a>
-            {% endif %}
         </nav>
 
         <section class="orders">

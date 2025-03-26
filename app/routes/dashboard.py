@@ -1,5 +1,7 @@
-from flask import Blueprint, render_template, session, redirect, url_for, abort
+from flask import Blueprint, render_template, session, redirect, url_for, abort, jsonify, request
 from datetime import datetime
+
+from app.models.warehouse import Reservation
 
 dashboard_bp = Blueprint('dashboard', __name__)
 
@@ -43,19 +45,139 @@ def index():
 @dashboard_bp.route('/communication')
 @login_required
 def communication():
-    return "Страница коммуникации"
+    # Перенаправляем на новый маршрут чатов
+    return redirect(url_for('chat.index'))
 
 
 @dashboard_bp.route('/storage')
 @login_required
 def storage():
-    return "Страница склада"
+    role = session.get('role')
+    user_id = session.get('user_id')
+    company = session.get('company')
+    location = session.get('location')
+
+    # Получаем все товары на складе
+    products = get_warehouse_products()
+
+    # Общее количество товаров на складе
+    total_items = sum(product['quantity'] for product in products)
+
+    return render_template(
+        'warehouse_page.html',
+        products=products,
+        total_items=total_items,
+        role=role,
+        company=company,
+        location=location
+    )
+
+
+# Функция для получения тестовых товаров склада
+def get_warehouse_products():
+    """
+    Возвращает список товаров на складе.
+    В реальном приложении данные будут извлекаться из базы данных.
+    """
+    products = [
+        {
+            'id': 1,
+            'name': 'A-ZONE 1.67 BASE 5/3',
+            'description': 'Seiko / ... / Биасферические',
+            'quantity': 24,
+            'available': True,
+            'manufacturer': 'Seiko',
+            'type': 'Биасферические',
+            'category': 'Линзы'
+        },
+        {
+            'id': 2,
+            'name': 'PREMIUM 1.5 SP',
+            'description': 'HyperOptics / ... / Стандартные',
+            'quantity': 36,
+            'available': True,
+            'manufacturer': 'HyperOptics',
+            'type': 'Стандартные',
+            'category': 'Линзы'
+        },
+        {
+            'id': 3,
+            'name': 'ULTRA 1.74 ASPH',
+            'description': 'VisionTech / ... / Асферические',
+            'quantity': 18,
+            'available': True,
+            'manufacturer': 'VisionTech',
+            'type': 'Асферические',
+            'category': 'Линзы'
+        },
+        {
+            'id': 4,
+            'name': 'PHOTOCHROMIC 1.6',
+            'description': 'OptiLight / ... / Фотохромные',
+            'quantity': 12,
+            'available': True,
+            'manufacturer': 'OptiLight',
+            'type': 'Фотохромные',
+            'category': 'Линзы'
+        },
+        {
+            'id': 5,
+            'name': 'BLUE CUT 1.67',
+            'description': 'Seiko / ... / Защита от синего света',
+            'quantity': 0,
+            'available': False,
+            'manufacturer': 'Seiko',
+            'type': 'Защита от синего света',
+            'category': 'Линзы'
+        }
+    ]
+    return products
+
+
+@dashboard_bp.route('/reserve_product', methods=['POST'])
+@login_required
+def reserve_product():
+    role = session.get('role')
+    user_id = session.get('user_id')
+    company = session.get('company')
+    location = session.get('location')
+
+    product_id = request.form.get('product_id', type=int)
+    quantity = request.form.get('quantity', type=int)
+    target_location = request.form.get('location')
+
+    # Проверка прав доступа для бронирования
+    if role == 'branch' and target_location and target_location != location:
+        # Отделение может бронировать только для себя
+        return jsonify({'success': False, 'message': 'У вас нет прав бронировать товар для другого отделения'})
+
+    if role == 'store' and company != request.form.get('company'):
+        # Компания может бронировать только для своих отделений
+        return jsonify({'success': False, 'message': 'У вас нет прав бронировать товар для другой компании'})
+
+    # Только admin и support могут бронировать для любого отделения
+
+    # Создаем бронирование
+    success = Reservation.create_reservation(
+        product_id,
+        quantity,
+        user_id,
+        role,
+        company,
+        target_location or location
+    )
+
+    if success:
+        return jsonify({'success': True, 'message': 'Товар успешно забронирован'})
+    else:
+        return jsonify({'success': False, 'message': 'Не удалось забронировать товар'})
 
 
 @dashboard_bp.route('/news')
 @login_required
 def news():
-    return "Страница новостей"
+    pass
+    #return render_template()
 
 
 @dashboard_bp.route('/order')
@@ -121,12 +243,12 @@ def get_user_data(user_id):
     """
     test_data = {
         'admin': {
-            'name': 'Adam Lumberg',
-            'company': 'NabievOptics',
+            'name': 'Николай Владеев',
+            'company': 'Vision Trend',
         },
         'support': {
             'name': 'Анна Поддержкина',
-            'company': 'NabievOptics',
+            'company': 'Vision Trend',
         },
         'store': {
             'name': 'Сергей Магазинов',
