@@ -171,6 +171,44 @@ body {
     transform: translate(-50%, -50%);
 }
 
+.error-message {
+    position: absolute;
+    top: calc(50% - 60px); /* Чуть выше input-field */
+    left: 50%;
+    transform: translate(-50%, 0);
+    background-color: rgba(255, 0, 0, 0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    max-width: 300px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+.animate-error {
+    animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translate(-50%, 0); }
+    25% { transform: translate(-52%, 0); }
+    50% { transform: translate(-48%, 0); }
+    75% { transform: translate(-51%, 0); }
+}
+
 .button {
     width: 100%;
     max-width: 320px;
