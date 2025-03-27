@@ -1,0 +1,43 @@
+Description:
+
+Модуль для работы с логикой администратора.
+Основные функции:
+- добавление нового клиента
+- удаление клиента
+- получение всех клиентов
+
+
+Dependencies: 
+- Зависит от модели models/user.py 
+- Зависит от базы данных database/users_db.py
+- Зависит от middleware/check_auth_middleware.py
+
+Paths:
+
+/admin/add_new_client (GET, POST) - добавление нового клиента
+/admin/remove_client/<id> (DELETE) - удаление клиента
+/admin/all_client (GET) - получение всех клиентов
+
+
+Templates:
+
+POST admin/add_new_client.html, GET admin/all_client.html - добавление нового клиента
+admin/remove_client.html - удаление клиента
+admin/all_client.html - получение всех клиентов
+
+
+Tests:
+
+python3.12 -m unittest app/modules/admin/admin_test.py
+
+
+Structure:
+
+app/modules/admin/
+    __init__.py
+    admin_model.py - модель администратора (может в этом модуле будет не нужной)
+    admin_service.py - логика администратора
+    admin_routes.py - маршруты администратора
+    admin_test.py - тесты только для проверки работы модуля
+    Description.txt - Описание модуля
+
