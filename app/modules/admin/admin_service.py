@@ -11,7 +11,7 @@ from app.database import users_db
 from app.database import delete_user
 
 
-def add_new_client_service(
+def add_new_partner_service(
     phone: str,
     password: str,
     role: str,
@@ -41,7 +41,7 @@ def add_new_client_service(
 
 
 
-def delete_client_service(id: int) -> User:
+def delete_partner_service(id: int) -> User:
     """
     Удаление клиента из базы данных
     """ 
@@ -59,7 +59,7 @@ def delete_client_service(id: int) -> User:
     return deleted_user
 
 
-def get_all_clients_service() -> List[User]:
+def get_all_partners_service() -> List[User]:
     """
     Получение всех клиентов из базы данных
     """
@@ -71,3 +71,23 @@ def get_all_clients_service() -> List[User]:
     
 
     return users_db
+
+
+def get_partner_by_id_service(id: int) -> User:
+    """
+    Получение пользователя по id
+    """
+
+    for user in users_db:
+        if user.id == id:
+            return user
+
+    return None
+
+
+def edit_partner_service(id: int, name: str, phone: str, role: str, company: str, location: str) -> User:
+    """
+    Редактирование партнёра
+    """
+
+    pass

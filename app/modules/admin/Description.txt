@@ -14,16 +14,15 @@ Dependencies:
 
 Paths:
 
-/admin/add_new_client (GET, POST) - добавление нового клиента
-/admin/remove_client/<id> (DELETE) - удаление клиента
-/admin/all_client (GET) - получение всех клиентов
-
+/admin/add_new_partner (GET, POST) - добавление нового партнёра
+/admin/partner_added_successfully/<int:id> (GET) - страница с успешной регистрацией
+/admin/delete_partner/<int:id> (GET, POST) - удаление партнёра
+/admin/all_partner (GET) - получение всех партнёров
+/admin/edit_partner/<int:id> (GET, POST) - редактирование партнёра
 
 Templates:
 
-POST admin/add_new_client.html, GET admin/all_client.html - добавление нового клиента
-admin/remove_client.html - удаление клиента
-admin/all_client.html - получение всех клиентов
+
 
 
 Tests:

@@ -1,0 +1,13 @@
+
+
+{% for user in users %}
+    <div>
+        <p>{{ user.name }}</p>
+        <p>{{ user.phone }}</p>
+        <p>{{ user.role }}</p>
+        <p>{{ user.company }}</p>
+        <p>{{ user.location }}</p>
+        <a href="{{ url_for('admin.delete_partner_route', id=user.id) }}">Удалить</a>
+        <a href="{{ url_for('admin.edit_partner_route', id=user.id) }}">Редактировать</a>
+    </div>
+{% endfor %}
