@@ -50,7 +50,7 @@ def delete_client_service(id: int) -> User:
 
     
     
-
+    # Временная функция для удаления клиента
     deleted_user = delete_user(id)
 
     print("Осталось пользователей", users_db)
