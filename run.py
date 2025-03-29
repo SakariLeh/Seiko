@@ -1,4 +1,6 @@
 from app import create_app
+from typing import List
+
 
 app = create_app()
 
