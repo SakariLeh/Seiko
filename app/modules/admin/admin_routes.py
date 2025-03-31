@@ -18,7 +18,8 @@ from app.middlewares import role_required_middleware
 # utils
 from app.utils import validate_phone, validate_password, validate_role
 
-
+# config
+from .admin_config import adminConf
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -28,7 +29,10 @@ admin_bp = Blueprint('admin', __name__)
 
 
 
-@admin_bp.route('/admin/add_new_partner', methods=[EMethod.GET, EMethod.POST])
+@admin_bp.route(
+    adminConf.r.get_path("Добавление нового партнёра"), 
+    methods=adminConf.r.get_methods("Добавление нового партнёра")
+)
 @role_required_middleware(ERoleUser.ADMIN)
 def add_new_partner_route():
     """
@@ -64,9 +68,12 @@ def add_new_partner_route():
      
 
     
-    return render_template('admin/add_partner_page.html')
+    return render_template(adminConf.r.get_temp("Добавление нового партнёра"))
 
-@admin_bp.route("/admin/partner_added_successfully/<int:id>")
+@admin_bp.route(
+    adminConf.r.get_path("Страница с успешной регистрацией"), 
+    methods = adminConf.r.get_methods("Страница с успешной регистрацией")
+)
 @role_required_middleware(ERoleUser.ADMIN)
 def partner_added_successfully_route(id: int):
     """
@@ -75,10 +82,13 @@ def partner_added_successfully_route(id: int):
 
     user = get_partner_by_id_service(id)
 
-    return render_template('admin/partner_added_successfully.html', user=user)
+    return render_template(adminConf.r.get_temp("Страница с успешной регистрацией"), user=user)
 
 
-@admin_bp.route('/admin/delete_partner/<int:id>', methods=[EMethod.GET, EMethod.POST])
+@admin_bp.route(
+    adminConf.r.get_path("Удаление партнёра"), 
+    methods = adminConf.r.get_methods("Удаление партнёра")
+)
 @role_required_middleware(ERoleUser.ADMIN)
 def delete_partner_route(id: int):
     """
@@ -95,11 +105,14 @@ def delete_partner_route(id: int):
 
 
 
-    return render_template('admin/delete_partner.html', user=user)
+    return render_template(adminConf.r.get_temp("Удаление партнёра"), user=user)
     
 
 
-@admin_bp.get("/admin/all_partner")
+@admin_bp.route(
+    adminConf.r.get_path("Получение всех партнёра"), 
+    methods = adminConf.r.get_methods("Получение всех партнёра")
+)
 @role_required_middleware(ERoleUser.ADMIN)
 def all_partners_route(): 
     """
@@ -107,10 +120,13 @@ def all_partners_route():
     """
 
     users = get_all_partners_service()
-    return render_template('admin/all_partner.html', users=users)
+    return render_template(adminConf.r.get_temp("Получение всех партнёра"), users=users, ERoleUser=ERoleUser)
 
 
-@admin_bp.route('/admin/edit_partner/<int:id>', methods=[EMethod.GET, EMethod.POST])
+@admin_bp.route(
+    adminConf.r.get_path("Изменения партнёра"), 
+    methods = adminConf.r.get_methods("Изменения партнёра")
+)
 @role_required_middleware(ERoleUser.ADMIN)
 def edit_partner_route(id: int):
     """
@@ -124,4 +140,4 @@ def edit_partner_route(id: int):
 
     user = get_partner_by_id_service(id)
 
-    return render_template('admin/edit_partner.html', user=user)
+    return render_template(adminConf.r.get_temp("Изменения партнёра"), user=user, ERoleUser=ERoleUser)

@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Добавить партнера</title>
-    <link rel="stylesheet" href="../css/add_staff_page.css">
+    <link rel="stylesheet" href="../../static/css/add_staff_page.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 
 <body>
     <header>
-        <a href="#"><i class="bi bi-arrow-left"></i></a>
+        <a href="{{ url_for('admin.all_partners_route') }}"><i class="bi bi-arrow-left"></i></a>
         <h1>Добавить партнера</h1>
     </header>
     <div class="container">
@@ -22,10 +22,9 @@
 
             <input type="text" value="Timur" name="name" placeholder="Имя партнера">
             <select name="role">
-                <option value="admin">Админ</option>
-                <option value="store">Склад</option>
-                <option value="branch">Филиал</option>
-                <option value="support">Сервис</option>
+                <option value="store">Сотрудники владельца</option>
+                <option value="branch">Владелец компании-партнёра</option>
+                <option value="support">Сотрудник(филиал) компании-партнёра</option>
             </select>
             <input type="text" value="998991234100" name="phone" placeholder="Номер телефона">
             <input type = "hidden" name = "password" value = "1234" placeholder="Пароль">

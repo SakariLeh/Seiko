@@ -7,11 +7,6 @@ Description:
 - получение всех клиентов
 
 
-Dependencies: 
-- Зависит от модели models/user.py 
-- Зависит от базы данных database/users_db.py
-- Зависит от middleware/check_auth_middleware.py
-
 Paths:
 
 /admin/add_new_partner (GET, POST) - добавление нового партнёра
@@ -38,5 +33,6 @@ app/modules/admin/
     admin_service.py - логика администратора
     admin_routes.py - маршруты администратора
     admin_test.py - тесты только для проверки работы модуля
+    admin_config.py - конфигурация модуля
     Description.txt - Описание модуля
 
