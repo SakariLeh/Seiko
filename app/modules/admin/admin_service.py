@@ -8,7 +8,7 @@ from app.types import ERoleUser
 
 # test database
 from app.database import users_db
-from app.database import delete_user
+
 
 
 def add_new_partner_service(
@@ -41,22 +41,28 @@ def add_new_partner_service(
 
 
 
-def delete_partner_service(id: int) -> User:
+def delete_partner_service(id: int) -> User | None:
     """
     Удаление клиента из базы данных
     """ 
 
-
-
-    
-    
     # Временная функция для удаления клиента
-    deleted_user = delete_user(id)
+    deleted_user = None
 
     print("Осталось пользователей", users_db)
 
-
+    for i, user in enumerate(users_db):
+        if user.id == id:
+            deleted_user = user
+            users_db.remove(user)
+            return user
+        
     return deleted_user
+    
+    
+
+
+
 
 
 def get_all_partners_service() -> List[User]:
@@ -90,4 +96,12 @@ def edit_partner_service(id: int, name: str, phone: str, role: str, company: str
     Редактирование партнёра
     """
 
-    pass
+    for user in users_db:
+        if user.id == id:
+            user.name = name
+            user.phone = phone
+            user.role = role
+            user.company = company
+            user.location = location 
+
+    return user

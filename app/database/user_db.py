@@ -52,11 +52,3 @@ users_db: List[User] = [
 ]
 
 
-def delete_user(id: int) -> User:
-
-
-    for i, user in enumerate(users_db):
-        if user.id == id:
-            users_db.remove(user)
-            return user
-    return None
