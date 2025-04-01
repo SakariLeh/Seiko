@@ -5,7 +5,7 @@ from app.config.router_config import RouterConfig
 
 # types 
 from app.types import EMethod, TRouter
-from typing import Dict, List
+from typing import Dict
 
 # Класс для работы с путями в модуле 
 class AdminRouterConfig(RouterConfig):
