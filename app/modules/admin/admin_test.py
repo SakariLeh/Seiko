@@ -1,5 +1,4 @@
 import unittest
-from flask import Flask, session, redirect, url_for
 from app import create_app
 
 
