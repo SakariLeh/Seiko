@@ -1,5 +1,8 @@
 import re
 
+# types
+from app.types import ERoleUser
+
 def validate_phone(phone):
     """
     Проверяет корректность номера телефона.
@@ -14,3 +17,11 @@ def validate_password(password):
     """
     pattern = r'^\d{4}$'
     return re.match(pattern, password) is not None
+
+
+def validate_role(role: str) -> bool:
+    """
+    Проверяет корректность роли.
+    """
+    return role.strip().lower() in [ERoleUser.ADMIN, ERoleUser.STORE, ERoleUser.BRANCH, ERoleUser.SUPPORT]
+

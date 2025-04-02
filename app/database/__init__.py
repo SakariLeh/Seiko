@@ -1,6 +1,5 @@
-# Экспорт функций работы с пользователями
-from .user_db import users_db
-from .user_db import delete_user
+
+
 
 # Экспорт функций работы со складом и бронированиями
 from .warehouse_db import (
@@ -16,3 +15,7 @@ from .warehouse_db import (
     update_reservation_status,
     delete_reservation
 )
+
+
+from .user_db import users_db
+from .new_db import news_db
