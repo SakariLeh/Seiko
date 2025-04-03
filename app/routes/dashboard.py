@@ -232,7 +232,7 @@ def manage_users():
     role = session.get('role')
     if role != 'admin':
         return redirect(url_for('dashboard.index'))
-    return "Управление пользователями"
+    return render_template('admin/manage_users_page.html')
 
 
 # Вспомогательные функции
