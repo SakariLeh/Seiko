@@ -5,6 +5,9 @@ from app.config import Config
 def create_app(config_class=Config, testing=False):
     app = Flask(__name__)
     app.config.from_object(config_class)
+    app.config['TESTING'] = testing
+
+
 
     # Настройка статических файлов
     app.static_folder = 'static'

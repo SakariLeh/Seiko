@@ -74,7 +74,7 @@ adminConf = AdminModuleConfig(
     python3.12 -m unittest app/modules/admin/admin_test.py
     """,
     r = AdminRouterConfig(routers),
-    is_logging = True
+    is_logging = False
 )
 
 
