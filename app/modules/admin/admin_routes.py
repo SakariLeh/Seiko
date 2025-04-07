@@ -134,10 +134,12 @@ def edit_partner_route(id: int):
     """
 
     if request.method == EMethod.POST:
+        
         user = edit_partner_service(id, request.form['name'], request.form['phone'], request.form['role'], request.form['company'], request.form['location'])
-
+        
         return redirect(url_for('admin.partner_added_successfully_route', id=user.id))
 
     user = get_partner_by_id_service(id)
+   
 
     return render_template(adminConf.r.get_temp("Изменения партнёра"), user=user, ERoleUser=ERoleUser)
