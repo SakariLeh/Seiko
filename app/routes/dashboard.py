@@ -31,6 +31,8 @@ def index():
     # Определяем заголовок роли для отображения на странице
     role_title = get_role_title(role)
 
+    print(session)
+
     return render_template(
         'owner_main_page.html',
         role=role,
