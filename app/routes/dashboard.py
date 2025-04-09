@@ -10,7 +10,7 @@ dashboard_bp = Blueprint('dashboard', __name__)
 def login_required(view_func):
     def wrapped_view(*args, **kwargs):
         if 'user_id' not in session:
-            return redirect(url_for('auth.index'))
+            return redirect(url_for('auth.auth_route'))
         return view_func(*args, **kwargs)
 
     wrapped_view.__name__ = view_func.__name__
@@ -20,7 +20,8 @@ def login_required(view_func):
 @dashboard_bp.route('/dashboard')
 @login_required
 def index():
-    role = session.get('role')
+    role = session.get('role') 
+
 
     # Получаем данные пользователя в зависимости от роли
     user_data = get_user_data(session.get('user_id'))

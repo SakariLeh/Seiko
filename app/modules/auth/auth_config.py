@@ -37,17 +37,17 @@ routers = {
     "Выход из системы": TRouter(
         path = "/logout",
         methods = [EMethod.GET], 
-        template = "auth/login_page.html" 
+        template = "dashboard.index" 
     ),
     "Вход в систему(номер телефона)": TRouter(
-        path = "auth/phone.html",
-        methods = [EMethod.GET, EMethod.POST], 
-        template = "auth/phone.html" 
+        path = "/phone_validation",
+        methods = [EMethod.POST], 
+        template = "auth/password.html" 
     ),
     "Вход в систему(пароль)": TRouter(
-        path = "auth/password.html",
-        methods = [EMethod.GET, EMethod.POST], 
-        template = "auth/password.html" 
+        path = "/password_validation",
+        methods = [EMethod.POST], 
+        template = "dashboard.index" 
     ),
     
 }

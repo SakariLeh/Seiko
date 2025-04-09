@@ -13,7 +13,8 @@ def create_app(config_class=Config, testing=False):
     app.static_folder = 'static'
 
     # Регистрация Blueprint'ов
-    from app.routes.auth import auth_bp
+    # from app.routes.auth import auth_bp
+    from app.modules.auth import auth_bp
     from app.routes.dashboard import dashboard_bp
     from app.routes.chat_routes import chat_bp
     from app.modules.admin import admin_bp
