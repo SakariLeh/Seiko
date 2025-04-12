@@ -42,7 +42,7 @@ routers = {
         template = "news/delete_news.html"
     ),
     "Получение всех новостей": TRouter(
-        path = "/news/all_news",
+        path = "/news",
         methods = [EMethod.GET],
         template = "news/all_news.html"
     ),

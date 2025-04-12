@@ -1,10 +1,9 @@
 
 # models
-from app.models.user import User
+from .user_model import User
 
 # types 
 from typing import List
-from app.types import ERoleUser
 
 # test database
 from app.database import users_db

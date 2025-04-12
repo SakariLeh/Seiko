@@ -13,16 +13,15 @@ def create_app(config_class=Config, testing=False):
     app.static_folder = 'static'
 
     # Регистрация Blueprint'ов
-    # from app.routes.auth import auth_bp
     from app.modules.auth import auth_bp
     from app.routes.dashboard import dashboard_bp
     from app.routes.chat_routes import chat_bp
-    from app.modules.admin import admin_bp
+    from app.modules.user import user_bp
     from app.modules.news import news_bp
 
     app.register_blueprint(chat_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(dashboard_bp)
-    app.register_blueprint(admin_bp)
+    app.register_blueprint(user_bp)
     app.register_blueprint(news_bp)
     return app

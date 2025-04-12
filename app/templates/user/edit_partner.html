@@ -11,11 +11,11 @@
 
 <body>
     <header>
-        <a href="{{ url_for('admin.all_partners_route') }}"><i class="bi bi-arrow-left"></i></a>
+        <a href="{{ url_for('user.all_partners_route') }}"><i class="bi bi-arrow-left"></i></a>
         <h1>Изменения партнёра</h1>
     </header>
     <div class="container">
-        <form class="employee-form" action = "{{ url_for('admin.edit_partner_route', id=user.id) }}" method='post'>
+        <form class="employee-form" action = "{{ url_for('user.edit_partner_route', id=user.id) }}" method='post'>
             {% if error %}
                 <p class="error">{{ error }}</p>
             {% endif %}

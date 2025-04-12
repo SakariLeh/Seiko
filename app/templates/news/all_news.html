@@ -1,6 +1,7 @@
 Hello all news 
 
 <a href="{{ url_for('news.add_news') }}">Добавить новость</a>
+<a href="{{ url_for('dashboard.index') }}">Назад</a>
 
 {% for new in news %}
     <h1>{{ new.title }}</h1>

@@ -176,10 +176,10 @@ def reserve_product():
         return jsonify({'success': False, 'message': 'Не удалось забронировать товар'})
 
 
-@dashboard_bp.route('/news')
-@login_required
-def news():
-    pass
+# @dashboard_bp.route('/news')
+# @login_required
+# def news():
+#     pass
     #return render_template()
 
 

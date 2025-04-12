@@ -8,9 +8,9 @@
 
 {% if user %}
     <h1>Удалить пользователя {{ user.name }}?</h1>
-    <form action="{{ url_for('admin.delete_partner_route', id=user.id) }}" method="post">
+    <form action="{{ url_for('user.delete_partner_route', id=user.id) }}" method="post">
         <button class="submit-button" type="submit">Да</button>
-        <a href="{{ url_for('admin.all_partners_route') }}"><i class="bi bi-arrow-left"></i></a>
+        <a href="{{ url_for('user.all_partners_route') }}"><i class="bi bi-arrow-left"></i></a>
     </form>
 {% else %}
     <h1>Пользователь не найден</h1>

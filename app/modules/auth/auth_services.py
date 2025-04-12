@@ -13,17 +13,13 @@ from app.utils import validate_phone, validate_password
 # models
 from .auth_models import AuthModel
 
-def is_logged_in_service() -> bool:
+def is_signed_in_service() -> bool:
     if ESessionUser.USER_ID in session:
         return True
     return False
 
 
-def validate_phone_service(phone: str) -> bool:
-    return validate_phone(phone)
 
-def validate_password_service(password: str) -> bool:
-    return validate_password(password)
 
 def login_service(phone: str, password: str) -> User | None:
     # Аутентификация пользователя
