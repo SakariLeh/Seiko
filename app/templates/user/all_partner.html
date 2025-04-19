@@ -1,0 +1,28 @@
+
+<head>
+    <link rel="stylesheet" href="../../static/css/partner_main_page.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+</head>
+
+<body>
+    <header>
+        <h1>Все партнёры</h1>
+        <a class="menu-btn" href="{{ url_for('user.add_new_partner_route') }}">Добавить партнера</a>
+    </header>
+    <main class="container orders">
+        {% for user in users %}
+            {% if user.role != ERoleUser.ADMIN %}
+            <div class="order">
+                <p class="order-name">{{ user.name }}</p>
+                <p class="order-phone">{{ user.phone }}</p>
+                <p class="order-role">{{ user.role }}</p>
+                <p class="order-company">{{ user.company }}</p>
+                <p class="order-location">{{ user.location }}</p>
+                <a href="{{ url_for('user.delete_partner_route', id=user.id) }}">Удалить</a>
+                <a href="{{ url_for('user.edit_partner_route', id=user.id) }}">Редактировать</a>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </main>
+</body>
+
