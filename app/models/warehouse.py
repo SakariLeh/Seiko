@@ -1,7 +1,25 @@
 from datetime import datetime
+from typing import List, Dict, Any, Optional
+
+
+class Product:
+    def __init__(self, id=None, name=None, description=None, quantity=None, available=True,
+                 manufacturer=None, type=None, category=None):
+        self.id = id
+        self.name = name
+        self.description = description
+        self.quantity = quantity
+        self.available = available
+        self.manufacturer = manufacturer
+        self.type = type
+        self.category = category
 
 
 class Reservation:
+    # Хранилище бронирований в памяти
+    _reservations = []
+    _reservation_id_counter = 1
+
     def __init__(self, id=None, product_id=None, quantity=None, user_id=None, company=None,
                  location=None, timestamp=None, status='pending'):
         self.id = id
@@ -13,56 +31,101 @@ class Reservation:
         self.timestamp = timestamp or datetime.now()
         self.status = status  # 'pending', 'approved', 'rejected'
 
-    @staticmethod
-    def create_reservation(product_id, quantity, user_id, role, company, location=None):
+    @classmethod
+    def create_reservation(cls, product_id, quantity, user_id, role, company, location):
         """
-        Создает бронирование товара на основе роли пользователя.
-        В реальном приложении это будет сохранено в базе данных.
+        Создает новое бронирование товара
 
-        Возвращает:
-        - True: бронирование успешно создано
-        - False: бронирование не удалось (например, недостаточно товара)
+        :param product_id: ID товара
+        :param quantity: Количество
+        :param user_id: ID пользователя
+        :param role: Роль пользователя
+        :param company: Компания
+        :param location: Отделение
+        :return: True если бронирование успешно создано, иначе False
         """
-        # Проверяем доступность товара
-        products = get_warehouse_products()
-        product = next((p for p in products if p['id'] == product_id), None)
+        try:
+            # Проверяем наличие товара и достаточное количество
+            products = get_warehouse_products()
+            product = next((p for p in products if p['id'] == product_id), None)
 
-        if not product or product['quantity'] < quantity:
+            if not product:
+                return False
+
+            if not product['available'] or product['quantity'] < quantity:
+                return False
+
+            # Создаем бронирование
+            reservation = cls(
+                id=cls._reservation_id_counter,
+                product_id=product_id,
+                quantity=quantity,
+                user_id=user_id,
+                company=company,
+                location=location
+            )
+
+            # Увеличиваем счетчик ID для следующего бронирования
+            cls._reservation_id_counter += 1
+
+            # Добавляем бронирование в хранилище
+            cls._reservations.append(reservation)
+
+            # Обновляем доступное количество товара
+            product['quantity'] -= quantity
+            if product['quantity'] == 0:
+                product['available'] = False
+
+            return True
+        except Exception as e:
+            print(f"Error creating reservation: {e}")
             return False
 
-        # Генерируем уникальный ID (в реальном приложении это сделает база данных)
-        reservation_id = len(reservations) + 1
+    @classmethod
+    def get_all_reservations(cls):
+        """
+        Возвращает все бронирования
 
-        reservation = Reservation(
-            id=reservation_id,
-            product_id=product_id,
-            quantity=quantity,
-            user_id=user_id,
-            company=company,
-            location=location,
-            status='approved'  # Для демо сразу утверждаем бронирование
-        )
+        :return: Список всех бронирований
+        """
+        return cls._reservations
 
-        # В реальном приложении здесь будет сохранение в базу данных
-        reservations.append(reservation.__dict__)
+    @classmethod
+    def get_user_reservations(cls, user_id):
+        """
+        Возвращает все бронирования пользователя
 
-        # Уменьшаем доступное количество товара
-        product['quantity'] -= quantity
-        if product['quantity'] == 0:
-            product['available'] = False
+        :param user_id: ID пользователя
+        :return: Список бронирований пользователя
+        """
+        return [r for r in cls._reservations if r.user_id == user_id]
 
-        return True
+    @classmethod
+    def get_company_reservations(cls, company):
+        """
+        Возвращает все бронирования компании
+
+        :param company: Название компании
+        :return: Список бронирований компании
+        """
+        return [r for r in cls._reservations if r.company == company]
+
+    @classmethod
+    def get_location_reservations(cls, location):
+        """
+        Возвращает все бронирования отделения
+
+        :param location: Название отделения
+        :return: Список бронирований отделения
+        """
+        return [r for r in cls._reservations if r.location == location]
 
 
-# Глобальный список для хранения бронирований (в реальном приложении это будет база данных)
-reservations = []
-
-
+# Функция получения товаров перенесена из routes/warehouse.py для избежания циклического импорта
 def get_warehouse_products():
     """
-    Получает список товаров на складе.
+    Возвращает список товаров на складе.
     В реальном приложении данные будут извлекаться из базы данных.
-    Этот метод должен совпадать с методом в dashboard.py
     """
     products = [
         {
@@ -73,7 +136,10 @@ def get_warehouse_products():
             'available': True,
             'manufacturer': 'Seiko',
             'type': 'Биасферические',
-            'category': 'Линзы'
+            'category': 'Линзы',
+            'parameters': {
+                # ... параметры товара
+            }
         },
         {
             'id': 2,
