@@ -10,3 +10,4 @@ if __name__ == '__main__':
         debug=env_config.get('IS_DEBUG', True), 
         port=env_config.get("FLASK_RUN_PORT", 5000)
     )
+

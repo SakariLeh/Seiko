@@ -11,7 +11,7 @@
 <body>
     <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Vision Trend" class="logo">
 
-    <form action="{{ url_for('auth.phone_validation') }}" method="POST">
+    <form action="{{ url_for('auth.login_phone_route') }}" method="POST">
         {% if error %}
         <div class="error-message animate-error">{{ error }}</div>
         {% endif %}

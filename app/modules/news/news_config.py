@@ -42,7 +42,7 @@ routers = {
         template = "news/delete_news.html"
     ),
     "Получение всех новостей": TRouter(
-        path = "/news/all_news",
+        path = "/news",
         methods = [EMethod.GET],
         template = "news/all_news.html"
     ),
@@ -73,5 +73,5 @@ newsConf = NewsModuleConfig(
     python3.12 -m unittest app/modules/news/news_test.py
     """,
     r = NewsRouterConfig(routers),
-    is_logging = True
+    is_logging = False
 )

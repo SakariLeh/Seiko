@@ -14,7 +14,7 @@ def login_required(view_func):
     @wraps(view_func)
     def wrapped_view(*args, **kwargs):
         if 'user_id' not in session:
-            return redirect(url_for('auth.index'))
+            return redirect(url_for('auth.auth_route'))
         return view_func(*args, **kwargs)
 
     return wrapped_view
@@ -54,7 +54,8 @@ def reserve_product():
 @dashboard_bp.route('/dashboard')
 @login_required
 def index():
-    role = session.get('role')
+    role = session.get('role') 
+
 
     # Получаем данные пользователя в зависимости от роли
     user_data = get_user_data(session.get('user_id'))
@@ -64,6 +65,8 @@ def index():
 
     # Определяем заголовок роли для отображения на странице
     role_title = get_role_title(role)
+
+    print(session)
 
     return render_template(
         'owner_main_page.html',
@@ -112,10 +115,10 @@ def communication():
     return redirect(url_for('chat.index'))
 
 
-@dashboard_bp.route('/news')
-@login_required
-def news():
-    pass
+# @dashboard_bp.route('/news')
+# @login_required
+# def news():
+#     pass
     #return render_template()
 
 
@@ -171,7 +174,7 @@ def manage_users():
     role = session.get('role')
     if role != 'admin':
         return redirect(url_for('dashboard.index'))
-    return "Управление пользователями"
+    return render_template('admin/manage_users_page.html')
 
 
 # Вспомогательные функции

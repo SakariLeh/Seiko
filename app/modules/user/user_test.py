@@ -4,11 +4,12 @@ from app import create_app
 
 # types 
 from app.types import ERoleUser
+from app.types import ESessionUser
 
 # models
 from app.models.user import User
 
-class TestAdminRoutes(unittest.TestCase):
+class TestUserRoutes(unittest.TestCase):
     
     @classmethod
     def setUpClass(cls):
@@ -24,8 +25,8 @@ class TestAdminRoutes(unittest.TestCase):
         with self.client:
             # Эмулируем сессию для запросов
             with self.client.session_transaction() as sess:
-                sess['user_id'] = 1  # Эмулируем ID пользователя в сессии
-                sess['role'] = ERoleUser.ADMIN  # Эмулируем роль администратора
+                sess[ESessionUser.USER_ID] = 1  # Эмулируем ID пользователя в сессии
+                sess[ESessionUser.ROLE] = ERoleUser.ADMIN  # Эмулируем роль администратора
 
     def tearDown(self):
         """Очистка сессии после каждого теста"""
@@ -35,7 +36,7 @@ class TestAdminRoutes(unittest.TestCase):
 
     def test_add_new_partners_get(self):
         """Тест для GET запроса на добавление нового клиента"""
-        response = self.client.get('/admin/add_new_partner')
+        response = self.client.get('/user/add_new_partner')
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"add_new_partner", response.data)
     
@@ -50,37 +51,37 @@ class TestAdminRoutes(unittest.TestCase):
             'role': ERoleUser.STORE
         }
         
-        response = self.client.post('/admin/add_new_partner', data=data)
+        response = self.client.post('/user/add_new_partner', data=data)
         self.assertEqual(response.status_code, 302)  # Expecting redirect
         self.assertIn('partner_added_successfully', response.location)
 
     def test_partner_added_successfully(self):
         """Тест для страницы успешного добавления партнера"""
-        response = self.client.get('/admin/partner_added_successfully/1')
+        response = self.client.get('/user/partner_added_successfully/1')
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'all_partner', response.data)
 
     def test_delete_partner_get(self):
         """Тест GET запроса на удаление партнера"""
-        response = self.client.get('/admin/delete_partner/1')
+        response = self.client.get('/user/delete_partner/1')
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'delete_partner', response.data)
 
     def test_delete_partner_post(self):
         """Тест POST запроса на удаление партнера"""
-        response = self.client.post('/admin/delete_partner/1')
+        response = self.client.post('/user/delete_partner/1')
         self.assertEqual(response.status_code, 302)  # Expecting redirect
-        self.assertEqual(response.location, '/admin/all_partner')
+        self.assertEqual(response.location, '/user/all_partner')
 
     def test_edit_partner_get(self):
         """Тест GET запроса на редактирование партнера"""
-        response = self.client.get('/admin/edit_partner/1')
+        response = self.client.get('/user/edit_partner/1')
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'\xd0\xa0\xd0\xb5\xd0\xb4\xd0\xb0\xd0\xba\xd1\x82\xd0\xb8\xd1\x80\xd0\xbe\xd0\xb2\xd0\xb0\xd1\x82\xd1\x8c \xd0\xbf\xd0\xb0\xd1\x80\xd1\x82\xd0\xbd\xd0\xb5\xd1\x80\xd0\xb0', response.data)
 
     def test_all_partners(self):
         """Тест для получения всех партнеров"""
-        response = self.client.get('/admin/all_partner')
+        response = self.client.get('/user/all_partner')
         self.assertEqual(response.status_code, 200)
         self.assertTrue(any(partner_data in response.data for partner_data in [
             b'NabievOptics',
@@ -91,10 +92,10 @@ class TestAdminRoutes(unittest.TestCase):
     def test_role_required_middleware_forbidden(self):
         """Тест для роли пользователя, не имеющего доступа"""
         with self.client.session_transaction() as sess:
-            sess['user_id'] = 1
-            sess['role'] = ERoleUser.STORE
+            sess[ESessionUser.USER_ID] = 1
+            sess[ESessionUser.ROLE] = ERoleUser.STORE
 
-        response = self.client.get('/admin/all_partner')
+        response = self.client.get('/user/all_partner')
         self.assertEqual(response.status_code, 302)
         self.assertIn('/dashboard', response.location)
 
