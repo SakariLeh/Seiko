@@ -4,7 +4,7 @@ from .method_enum import EMethod
 
 class TRouter: 
     path: str 
-    methods: List[str]
+    methods: List[EMethod]
     template: str 
 
     def __init__(self, path: str, methods: List[EMethod], template: str) -> None: 
