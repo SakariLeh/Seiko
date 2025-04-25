@@ -29,7 +29,7 @@ class WarehouseModuleConfig(ModuleConfig):
 
 # Дальше идёт hashMap роутов для модуля
 routers = {
-    "Зарезервировать продукт": TRouter(
+    "Бронирование товара": TRouter(
         path = "/reserve_product", # путь по которому будет доступен роут
         methods = [EMethod.POST], # методы, которые будут доступны для этого роута
         template = "" # путь к шаблону, который будет использоваться для этого роута
