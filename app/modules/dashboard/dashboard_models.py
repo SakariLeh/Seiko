@@ -1,6 +1,6 @@
 
 # Тестовый импорт. Удалить потом!!!
-from dashboard_common_test_data import test_orders, test_recent_orders, test_user_names, test_role_titles
+from .dashboard_common_test_data import test_orders, test_recent_orders, test_user_names, test_role_titles
 
 
 from flask import session

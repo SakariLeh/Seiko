@@ -64,16 +64,34 @@
         textarea {
             min-height: 200px;
         }
-        button {
-            background-color: #007bff;
+        .submit-btn {
+            background-color: #4CAF50;
             color: white;
             border: none;
-            padding: 12px;
-            border-radius: 5px;
+            padding: 15px;
+            border-radius: 8px;
             font-size: 16px;
             cursor: pointer;
-            margin-top: 10px;
-            display: none;
+            margin-top: 20px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 200px;
+            align-self: center;
+        }
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            .container {
+                border-radius: 0;
+                width: 100%;
+            }
+            input, textarea {
+                font-size: 16px; /* Prevents iOS zoom on focus */
+            }
+            .submit-btn {
+                width: 100%;
+                max-width: none;
+            }
         }
     </style>
 </head>
@@ -94,7 +112,7 @@
                     <label>Текст</label>
                     <textarea name="description" placeholder=""></textarea>
                 </div>
-                <button type="submit">Add News</button>
+                <button type="submit" class="submit-btn">Добавить</button>
             </form>
         </div>
     </div>
