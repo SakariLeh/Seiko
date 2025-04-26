@@ -1,4 +1,4 @@
-from app.config import EnvConfig
+from env_config_lib import EnvConfig
 
 # Настройка виртуального окружения
 env_config = EnvConfig(
