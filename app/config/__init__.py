@@ -5,10 +5,10 @@ from .router_config import RouterConfig
 from .config import Config
 from .env_config import EnvConfig
 
-__export__ = [
-    RouterConfig,
-    ModuleConfig,
-    Config,
-    EnvConfig
+__all__ = [
+    "RouterConfig",
+    "ModuleConfig",
+    "Config",
+    "EnvConfig"
 ]
 

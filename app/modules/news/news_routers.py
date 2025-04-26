@@ -26,7 +26,7 @@ news_bp = Blueprint("news", __name__)
 
 
 @news_bp.route(
-    newsConf.r.get_methods("Получение всех новостей"),
+    newsConf.r.get_path("Получение всех новостей"),
     methods = newsConf.r.get_methods("Получение всех новостей")
 )
 def all_news():
