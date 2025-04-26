@@ -14,7 +14,7 @@ def create_app(config_class=Config, testing=False):
 
     # Регистрация Blueprint'ов
     from app.modules.auth import auth_bp
-    from app.routes.dashboard import dashboard_bp
+    from app.modules.dashboard import dashboard_bp
     from app.routes.chat_routes import chat_bp
     from app.modules.user import user_bp
     from app.modules.news import news_bp
