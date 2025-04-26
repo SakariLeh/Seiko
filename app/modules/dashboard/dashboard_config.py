@@ -17,7 +17,7 @@ class DashboardModuleConfig(ModuleConfig):
         r: DashboardRouterConfig,
         is_logging: bool = True 
     ) -> None:
-        super(DashboardRouterConfig, self).__init__(
+        super(DashboardModuleConfig, self).__init__(
             title=title,
             description=description,
             r=r,
@@ -64,5 +64,5 @@ dashboardConf = DashboardModuleConfig(
     python3.11 -m unittest app/modules/auth/dashboard_test.py
     """,
     r = DashboardRouterConfig(routers),
-    is_logging=True
+    is_logging = True
 )
