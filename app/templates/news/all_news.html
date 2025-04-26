@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новости</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #000;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0;
+            background-color: white;
+            border-radius: 20px;
+            min-height: 100vh;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+        .back-btn {
+            color: #000;
+            text-decoration: none;
+            font-size: 24px;
+        }
+        .title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .filter-icons {
+            display: flex;
+            gap: 10px;
+        }
+        .news-item {
+            background-color: white;
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .news-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .news-description {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .date-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 5px;
+        }
+        .date {
+            font-size: 12px;
+            color: #666;
+        }
+        .camera-icon {
+            width: 16px;
+            height: 16px;
+        }
+        .add-btn {
+            position: fixed;
+            bottom: 20px;
+            right: calc(50% - 320px);
+            background-color: #ffc107;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="{{ url_for('dashboard.index') }}" class="back-btn">←</a>
+            <h1 class="title">Новости</h1>
+            <div class="filter-icons">
+                <span>▼</span>
+                <span>☰</span>
+            </div>
+        </div>
+
+        {% for new in news %}
+        <div class="news-item">
+            <div class="news-title">{{ new.title }}</div>
+            <div class="news-description">{{ new.description }}</div>
+            <div class="date-container">
+                <span class="camera-icon">📷</span>
+                <span class="date">{{ new.created_date }}</span>
+            </div>
+            <a href="{{ url_for('news.detailed_news', id=new.id) }}" style="display: none;">Подробнее</a>
+            <a href="{{ url_for('news.edit_news', id=new.id) }}" style="display: none;">Редактировать</a>
+            <a href="{{ url_for('news.delete_news', id=new.id) }}" style="display: none;">Удалить</a>
+        </div>
+        {% endfor %}
+
+        <a href="{{ url_for('news.add_news') }}" class="add-btn">+</a>
+    </div>
+</body>
+</html>

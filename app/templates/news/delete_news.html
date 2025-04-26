@@ -1,0 +1,8 @@
+
+
+
+<h1>Вы уверены что хотите удалить новость?</h1>
+<form action="{{ url_for('news.delete_news', id=id) }}" method="post">
+    <button type="submit">Удалить</button>
+    <a href="{{ url_for('news.all_news') }}">Назад</a>
+</form>
