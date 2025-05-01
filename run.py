@@ -1,9 +1,11 @@
 from app import create_app
-from app.env import env_config
+from app.infrastructure import env_config
 
 
 
 app = create_app()
+
+
 
 if __name__ == '__main__':
     app.run(
