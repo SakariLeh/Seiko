@@ -4,7 +4,8 @@ from datetime import datetime
 from functools import wraps
 
 from app.models.warehouse import Reservation, get_warehouse_products
-from app.routes.warehouse import warehouse_bp
+# from app.routes.warehouse import warehouse_bp
+from app.modules.warehouse import warehouse_bp
 
 dashboard_bp = Blueprint('dashboard', __name__)
 
@@ -20,35 +21,35 @@ def login_required(view_func):
     return wrapped_view
 
 
-@dashboard_bp.route('/storage')
-@login_required
-def storage():
-    role = session.get('role')
-    user_id = session.get('user_id')
-    company = session.get('company')
-    location = session.get('location')
+# @dashboard_bp.route('/storage')
+# @login_required
+# def storage():
+#     role = session.get('role')
+#     user_id = session.get('user_id')
+#     company = session.get('company')
+#     location = session.get('location')
 
-    # Получаем все товары на складе
-    products = get_warehouse_products()
+#     # Получаем все товары на складе
+#     products = get_warehouse_products()
 
-    # Общее количество товаров на складе
-    total_items = sum(product['quantity'] for product in products)
+#     # Общее количество товаров на складе
+#     total_items = sum(product['quantity'] for product in products)
 
-    return render_template(
-        'warehouse_page.html',
-        products=products,
-        total_items=total_items,
-        role=role,
-        company=company,
-        location=location
-    )
+#     return render_template(
+#         'warehouse_page.html',
+#         products=products,
+#         total_items=total_items,
+#         role=role,
+#         company=company,
+#         location=location
+#     )
 
 
-@dashboard_bp.route('/reserve_product', methods=['POST'])
-@login_required
-def reserve_product():
-    # Переадресуем запрос в route из warehouse_bp
-    return warehouse_bp.reserve_product()
+# @dashboard_bp.route('/reserve_product', methods=['POST'])
+# @login_required
+# def reserve_product():
+#     # Переадресуем запрос в route из warehouse_bp
+#     return warehouse_bp.reserve_product()
 
 
 @dashboard_bp.route('/dashboard')
@@ -82,6 +83,7 @@ def index():
 @dashboard_bp.route('/reservations')
 @login_required
 def reservations():
+
     role = session.get('role')
     user_id = session.get('user_id')
     company = session.get('company')

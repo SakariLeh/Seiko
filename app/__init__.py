@@ -2,11 +2,37 @@ from flask import Flask
 from app.config import Config
 
 
-def create_app(config_class=Config, testing=False):
+
+
+
+from app.infrastructure import db, migrationDB
+
+
+
+
+
+
+
+
+
+def create_app(config_class=Config, testing=False) -> Flask:
     app = Flask(__name__)
+    
     app.config.from_object(config_class)
     app.config['TESTING'] = testing
+    
 
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///seiko.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+
+    db.init_app(app)
+
+    with app.app_context():
+        db.create_all()
+        migrationDB.init_table_data()
+    
+    
 
 
     # Настройка статических файлов
@@ -19,6 +45,7 @@ def create_app(config_class=Config, testing=False):
     from app.modules.user import user_bp
     from app.modules.news import news_bp
     from app.modules.warehouse import warehouse_bp
+    from app.modules.reservation import reservation_bp
 
     app.register_blueprint(chat_bp)
     app.register_blueprint(auth_bp)
@@ -26,4 +53,13 @@ def create_app(config_class=Config, testing=False):
     app.register_blueprint(user_bp)
     app.register_blueprint(news_bp)
     app.register_blueprint(warehouse_bp)
+    app.register_blueprint(reservation_bp)
+
     return app
+
+
+__all_ = [
+    "create_app",
+]
+    
+
