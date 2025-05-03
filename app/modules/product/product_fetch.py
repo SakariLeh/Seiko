@@ -2,10 +2,12 @@
 from .product_service import (
     create_product_service,
     get_product_by_id_service,
-    get_all_products_service
+    get_all_products_service,
+
+    get_quantity_products_service
 )
 
-from .product_model import ProductModel
+from .product_models import ProductModel, ProductQuantityModel
 
 
 from flask import current_app
@@ -69,21 +71,41 @@ def get_product_by_id_fetch(product_id: int) -> ProductModel | None:
 
     return product
 
-def get_all_products_fetch() -> list[ProductModel] | None:
+def get_all_products_fetch() -> list[ProductModel] | list:
     """
     Получает все записи из таблицы products
     :return: список объектов ProductModel
     """
 
-    products = None
+    products = []
 
     try:
         with current_app.app_context():
             products = get_all_products_service()
     except Exception as e:
         print(f"Ошибка при получении всех записей таблицы(products): {e}")
-        return None
+        return []
     
     print(products)
 
     return products
+
+# get_quantity_products_service
+def get_all_quantity_products_fetch() -> list[ProductQuantityModel] | list:
+    """
+    Получение количества продуктов
+    :return: список объектов ProductQuantityModel
+    """
+
+    products_quantity = []
+
+    try:
+        with current_app.app_context():
+            products_quantity = get_quantity_products_service()
+    except Exception as e:
+        print(f"Ошибка при получении всех записей таблицы(products): {e}")
+        return []
+    
+    print(products_quantity)
+
+    return products_quantity

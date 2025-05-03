@@ -1,5 +1,5 @@
 
-from .product_model import ProductModel
+from .product_models import ProductModel, ProductQuantityModel
 from app.infrastructure import db 
 
 
@@ -36,3 +36,11 @@ def get_all_products_service() -> list[ProductModel]:
     :return: список объектов ProductModel
     """
     return ProductModel.query.all()
+
+
+def get_quantity_products_service() -> int:
+    """
+    Получает количество продуктов в базе данных
+    :return: количество продуктов
+    """
+    return ProductQuantityModel.query.all()

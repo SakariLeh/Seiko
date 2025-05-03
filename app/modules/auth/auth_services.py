@@ -3,6 +3,7 @@ from flask import session
 
 # types
 from app.types import ESessionUser
+from typing import Dict
 
 # models
 from app.models import User
@@ -41,4 +42,12 @@ def logout_service() -> None:
     return None
 
 
+def get_info_auth_service() -> Dict[str, str]:
+    return {
+        "user_id": session[ESessionUser.USER_ID],
+        "role":session[ESessionUser.ROLE],
+        "name": session[ESessionUser.NAME],
+        "company":session[ESessionUser.COMPANY],
+        "location":session[ESessionUser.LOCATION]
+    }
 

@@ -5,7 +5,7 @@ from app.config import Config
 
 
 
-from app.infrastructure import db 
+from app.infrastructure import db, migrationDB
 
 
 
@@ -30,6 +30,7 @@ def create_app(config_class=Config, testing=False) -> Flask:
 
     with app.app_context():
         db.create_all()
+        migrationDB.init_table_data()
     
     
 
@@ -44,22 +45,21 @@ def create_app(config_class=Config, testing=False) -> Flask:
     from app.modules.user import user_bp
     from app.modules.news import news_bp
     from app.modules.warehouse import warehouse_bp
+    from app.modules.reservation import reservation_bp
 
     app.register_blueprint(chat_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(news_bp)
-<<<<<<< HEAD
+    app.register_blueprint(warehouse_bp)
+    app.register_blueprint(reservation_bp)
+
     return app
 
 
 __all_ = [
-    "app",
-    "db",
     "create_app",
 ]
-=======
-    app.register_blueprint(warehouse_bp)
-    return app
->>>>>>> 1a455304a1b4069e3deb9f85a4e9c0f958dce519
+    
+
