@@ -1,111 +1,70 @@
-from app.models.warehouse import Reservation
+
 from typing import List, Dict, Any
 
-def get_warehouse_products() -> List[Dict[str, Any]]:
+from flask import current_app
+
+# module product 
+from app.modules.product import get_all_products_fetch, get_all_quantity_products_fetch, get_product_by_id_fetch
+from app.modules.product import ProductModel, ProductQuantityModel
+
+
+
+def get_warehouse_products_service() -> List[Dict[str, Any]]:
     """
     Возвращает список товаров на складе.
     В реальном приложении данные будут извлекаться из базы данных.
     """
-    products = [
-        {
-            'id': 1,
-            'name': 'A-ZONE 1.67 BASE 5/3',
-            'description': 'Seiko / ... / Биасферические',
-            'quantity': 24,
-            'available': True,
-            'manufacturer': 'Seiko',
-            'type': 'Биасферические',
-            'category': 'Линзы',
-            'parameters': {
-                'sphereRight': "-1.00", # dpt
-                'shereLeft': "-1.00",
-                'cylinderRight': "+1.00",
-                'cylinderLeft': "+1.00",
-                'axisRight': 94,
-                'axisLeft': 94,
-                'additionRight': "+1.75",
-                'additionLeft': "+1.75",
-                'lensRight': "Brilliance 1.60 Sensity",
-                'lensLeft': "Brilliance 1.60 Sensity",
-                'diameterRight': 75,
-                'diameterLeft': 75,
-                'corridorLength': 12,
-                'nearDistanse': "40.00",
-                'personalDesignCode': "FNCC",
-                'coatingRight': 'SRB',
-                'coatingLeft': 'SRB',
-                'pplRight': 'Sensity Dark Grey', # ppl - Photo/Pola/Filter
-                'pplLeft': 'Sensity Dark Grey',
-                'farPupilDistanceRight': '32.00',
-                'farPupilDistanceLeft': '33.00',
-                'eyePointHeightRight': '30.00',
-                'eyePointHeightLeft': '30.00',
-                'aRight': '50.00',
-                'aLeft': '50.00',
-                'bRight': '43.00',
-                'bLeft': '43.00',
-                'dbl': '24.00',
-                'frameType': 'Acetate(HI)',
-                "cCode": "2233",
-                'corneaDistanceRight': "14.00",
-                'corneaDistanceLeft': "14.00",
-                'pantoscopicAngle': "19.00",
-                "frameangle": "4.00"
-            }
-
-        },
-        {
-            'id': 2,
-            'name': 'PREMIUM 1.5 SP',
-            'description': 'HyperOptics / ... / Стандартные',
-            'quantity': 36,
-            'available': True,
-            'manufacturer': 'HyperOptics',
-            'type': 'Стандартные',
-            'category': 'Линзы'
-        },
-        {
-            'id': 3,
-            'name': 'ULTRA 1.74 ASPH',
-            'description': 'VisionTech / ... / Асферические',
-            'quantity': 18,
-            'available': True,
-            'manufacturer': 'VisionTech',
-            'type': 'Асферические',
-            'category': 'Линзы'
-        },
-        {
-            'id': 4,
-            'name': 'PHOTOCHROMIC 1.6',
-            'description': 'OptiLight / ... / Фотохромные',
-            'quantity': 12,
-            'available': True,
-            'manufacturer': 'OptiLight',
-            'type': 'Фотохромные',
-            'category': 'Линзы'
-        },
-        {
-            'id': 5,
-            'name': 'BLUE CUT 1.67',
-            'description': 'Seiko / ... / Защита от синего света',
-            'quantity': 0,
-            'available': False,
-            'manufacturer': 'Seiko',
-            'type': 'Защита от синего света',
-            'category': 'Линзы'
-        }
-    ]
+    products: list[ProductModel] | list = get_all_products_fetch()
     return products
 
-def create_reservation_service(product_id: int, quantity: int, user_id: int, role: str, company: str, location: str) -> bool:
+# def create_reservation_service(product_id: int, quantity: int, user_id: int, role: str, company: str, location: str) -> WarehouseOrderModel | None:
+#     """
+#     Создает бронирование товара
+#     """
+#     # return Reservation.create_reservation(
+#     #     product_id,
+#     #     quantity,
+#     #     user_id,
+#     #     role,
+#     #     company,
+#     #     location
+#     # )
+
+#     reservation = None 
+
+#     with current_app.app_context():
+#         reservation = WarehouseOrderModel(
+#             product_id=product_id,
+#             quantity=quantity,
+#             user_id=user_id,
+#             company=company,
+#             location=location
+#         )
+#         current_app.db.session.add(reservation)
+#         current_app.db.session.commit()
+
+
+#     return reservation
+
+
+def get_all_quantity_products_service() -> list[ProductQuantityModel] | list:
     """
-    Создает бронирование товара
+    Возвращает общее количество товаров на складе.
+    В реальном приложении данные будут извлекаться из базы данных.
     """
-    return Reservation.create_reservation(
-        product_id,
-        quantity,
-        user_id,
-        role,
-        company,
-        location
-    )
+
+    
+    return get_all_quantity_products_fetch() 
+
+
+def get_total_sum_quantity_service() -> int:
+    """
+    Возвращает общее количество товаров на складе.
+    В реальном приложении данные будут извлекаться из базы данных.
+    """
+    return sum(product.quantity for product in get_all_quantity_products_fetch())
+
+
+
+def get_warehouse_product_by_id_service(id: int) -> ProductModel | None:
+    return get_product_by_id_fetch(id)
