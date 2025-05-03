@@ -43,12 +43,14 @@ def create_app(config_class=Config, testing=False) -> Flask:
     from app.routes.chat_routes import chat_bp
     from app.modules.user import user_bp
     from app.modules.news import news_bp
+    from app.modules.warehouse import warehouse_bp
 
     app.register_blueprint(chat_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(news_bp)
+<<<<<<< HEAD
     return app
 
 
@@ -57,3 +59,7 @@ __all_ = [
     "db",
     "create_app",
 ]
+=======
+    app.register_blueprint(warehouse_bp)
+    return app
+>>>>>>> 1a455304a1b4069e3deb9f85a4e9c0f958dce519
