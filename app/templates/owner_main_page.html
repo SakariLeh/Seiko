@@ -41,9 +41,13 @@
             </div>
         </section>
 
-        <nav class="menu">
-            <a href="{{ url_for('dashboard.communication') }}" class="menu-btn">
-                <img src="{{ url_for('static', filename='img/chat-icon.png') }}" alt="Коммуникация"> Коммуникация
+    <nav class="menu">
+        <a href="{{ url_for('dashboard.communication') }}" class="menu-btn">
+            <img src="{{ url_for('static', filename='img/chat-icon.png') }}" alt="Коммуникация"> Коммуникация
+        </a>
+        <div class="menu-row">
+            <a href="{{ url_for('warehouse.warehouse_storage_route') }}" class="menu-btn">
+                <img src="{{ url_for('static', filename='img/storage-icon.png') }}" alt="Склад"> Склад
             </a>
             <a href="{{ url_for('auth.logout_route') }}" class="logout-btn menu-btn"><i class="bi bi-door-open-fill"></i> Выйти из аккаунта</a>
             <div class="menu-row">
