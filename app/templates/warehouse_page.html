@@ -11,6 +11,7 @@
 </head>
 
 <body>
+
     <div class="header">
         <a href="{{ url_for('dashboard.index') }}"><i class="bi bi-arrow-left"></i></a>
         <span class="header-title">Склад</span>
@@ -28,41 +29,26 @@
     <p class="title">Весь товар:</p>
 
     <div class="product-list">
-        {% for product, product_quantity in zip(products, products_quantity) %}
-        
-
-        
-            <div class="product" data-product-id="{{ product.id }}" data-product-name="{{ product.name }}" data-product-category="{{ product.category }}" data-product-manufacturer="{{ product.manufacturer }}">
-                <div class="info-left">
-                    <p> 
-                        {{ product_quantity.quantity }} шт
-                        
-                        
-                        
-                    </p>
-                </div>
-                
-                    <div class="info-right">
-                        <div class="info-contant">
-                            <div class="product-title">{{ product.name }}</div>
-                            <div class="product-desc">{{ product.description_intro }}</div>
-                            <div class="product-status {% if not product_quantity.is_available %}product-status-warn{% endif %}">
-                                {% if product_quantity.is_available %}Есть в наличии{% else %}Нет в наличии{% endif %}
-                            </div>
-                            
-                            <a href="{{ url_for('warehouse.warehouse_product_router', id=product.id) }}">
-                                <i class="bi bi-info-circle"></i> Подробнее
-                            </a>
-                            
-                        </div>
-                        <div class="product-add" {% if not product_quantity.is_available %}style="opacity: 0.5; cursor: not-allowed;"{% endif %}>
-                            
-                            
-                            <i class="bi bi-plus"></i>
-                        </div>
-                    </div>
-                
+        {% for product in products %}
+        <div class="product" data-product-id="{{ product.id }}" data-product-name="{{ product.name }}" data-product-category="{{ product.category }}" data-product-manufacturer="{{ product.manufacturer }}">
+            <div class="info-left">
+                <p>
+                    {{ product.quantity }} шт
+                </p>
             </div>
+            <div class="info-right">
+                <div class="info-contant">
+                    <div class="product-title">{{ product.name }}</div>
+                    <div class="product-desc">{{ product.description }}</div>
+                    <div class="product-status {% if not product.available %}product-status-warn{% endif %}">
+                        {% if product.available %}Есть в наличии{% else %}Нет в наличии{% endif %}
+                    </div>
+                </div>
+                <div class="product-add" {% if not product.available %}style="opacity: 0.5; cursor: not-allowed;"{% endif %}>
+                    <i class="bi bi-plus"></i>
+                </div>
+            </div>
+        </div>
         {% endfor %}
     </div>
 
@@ -172,7 +158,7 @@
                 e.preventDefault();
 
                 $.ajax({
-                    url: "{{ url_for('reservation.reserve_product_route') }}",
+                    url: "{{ url_for('dashboard.reserve_product') }}",
                     type: "POST",
                     data: $(this).serialize(),
                     success: function(response) {

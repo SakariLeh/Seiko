@@ -183,8 +183,3 @@ def get_warehouse_products():
         }
     ]
     return products
-
-
-
-
-

@@ -56,8 +56,7 @@ body {
     font-weight: 600;
 }
 
-.header a,
-.info-contant a {
+.header a {
     text-decoration: none;
     color: black;
 }
