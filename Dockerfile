@@ -8,6 +8,6 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-EXPOSE 8000
+EXPOSE 4200
 
-CMD ["flask", "run", "--host=0.0.0.0", "--port=8000"]
+CMD ["sh", "-c", "gunicorn -w 4 -b $FLASK_RUN_HOST:$FLASK_RUN_PORT ${FLASK_APP%.py}:app"]

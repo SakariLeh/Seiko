@@ -58,7 +58,7 @@ def create_app(config_class=Config, testing=False) -> Flask:
     return app
 
 
-__all_ = [
+__all__ = [
     "create_app",
 ]
     
