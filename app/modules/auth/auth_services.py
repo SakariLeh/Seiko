@@ -6,7 +6,7 @@ from app.types import ESessionUser
 from typing import Dict
 
 # models
-from app.models import User
+from app.modules.user import UserModel
 
 # utils 
 from app.utils import validate_phone, validate_password
@@ -22,12 +22,14 @@ def is_signed_in_service() -> bool:
 
 
 
-def login_service(phone: str, password: str) -> User | None:
+def login_service(phone: str, password: str) -> UserModel | None:
     # Аутентификация пользователя
     user = AuthModel.authenticate(phone, password)
 
     if not user:
         return None
+
+    
 
     session[ESessionUser.USER_ID] = user.id
     session[ESessionUser.ROLE] = user.role
@@ -51,3 +53,9 @@ def get_info_auth_service() -> Dict[str, str]:
         "location":session[ESessionUser.LOCATION]
     }
 
+
+
+
+
+def get_current_user_id():
+    return session.get(ESessionUser.USER_ID)

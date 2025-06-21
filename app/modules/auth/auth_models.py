@@ -4,9 +4,11 @@ from app.models import User
 
 # types
 from app.types import ESessionUser
-
+COUNT_AUTH = 0
 
 class AuthModel(User):
+    
+
 
     def __init__(self, id=None, phone=None, password=None, role=None, name=None, company=None, location=None):
         super().__init__(id, phone, password, role, name, company, location)
@@ -38,26 +40,36 @@ class AuthModel(User):
                 'company': 'NabievOptics',
                 'location': None
             },
-            '998909876543': {
-                'password': '4321',
-                'role': 'store',    # Владелец компании-партнёра
-                'name': 'Marina Volkova',
-                'company': 'Оптика+',
-                'location': None
-            },
+            # '998909876543': {
+            #     'password': '4321',
+            #     'role': 'store',    # Владелец компании-партнёра
+            #     'name': 'Marina Volkova',
+            #     'company': 'Оптика+',
+            #     'location': None
+            # },
             '998903456789': {
                 'password': '9876',
                 'role': 'branch',   # Сотрудник(филиал) компании-партнёра
                 'name': 'Sergey Sidorov',
                 'company': 'Оптика+',
                 'location': 'ТЦ Галерея'
+            },
+
+            "998909876543": {
+                'password': '4321',
+                'role': 'admin',    # Владелец
+                'name': 'User 2',
+                'company': 'NabievOptics',
+                'location': None
             }
         }
 
         if phone in test_users and test_users[phone]['password'] == password:
             user_data = test_users[phone]
+            global COUNT_AUTH
+            COUNT_AUTH += 1
             user = User(
-                id=1,  # В реальном приложении будет ID из базы данных
+                id=COUNT_AUTH,  # В реальном приложении будет ID из базы данных
                 phone=phone,
                 password=password,
                 role=user_data[ESessionUser.ROLE],
@@ -66,4 +78,8 @@ class AuthModel(User):
                 location=user_data[ESessionUser.LOCATION]
             )
             return user
+        
+
+      
+
         return None

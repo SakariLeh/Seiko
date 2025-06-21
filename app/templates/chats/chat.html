@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Чат</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f2f2f2;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .chat-container {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message {
+      max-width: 60%;
+      padding: 10px 15px;
+      margin: 5px 0;
+      border-radius: 15px;
+      word-break: break-word;
+    }
+
+    .my-message {
+      align-self: flex-end;
+      background-color: #daf8cb;
+    }
+
+    .other-message {
+      align-self: flex-start;
+      background-color: #ffffff;
+    }
+
+    .chat-input {
+      display: flex;
+      padding: 10px;
+      background: #fff;
+      border-top: 1px solid #ccc;
+    }
+
+    #myMessage {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      margin-left: 10px;
+      padding: 10px 15px;
+      border: none;
+      background: #28a745;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #218838;
+    }
+
+
+    .message-wrapper {
+        display: flex;
+        flex-direction: column;
+        margin: 10px 0;
+        max-width: 70%;
+        }
+
+        .my-wrapper {
+        align-self: flex-end;
+        text-align: right;
+        }
+
+        .other-wrapper {
+        align-self: flex-start;
+        text-align: left;
+        }
+
+        .sender-name {
+        font-size: 13px;
+        color: #888;
+        margin-bottom: 3px;
+        font-weight: 600;
+        }
+  </style>
+</head>
+<body>
+    <div class="chat-container" id="messages">
+        {% for message in messages %}
+            <div class="message-wrapper {{ 'my-wrapper' if message.sender_id == current_user_id else 'other-wrapper' }}">
+            <div class="sender-name">
+                ID: {{ message.sender_id }}
+
+                {% if message.sender_id == current_user_id %}
+                    Вы
+                {% else %}
+                    {{ get_user_name_service(message.sender_id) }}
+                {% endif %}
+            </div>
+            <div class="message {{ 'my-message' if message.sender_id == current_user_id else 'other-message' }}">
+                {{ message.text }}
+            </div>
+            </div>
+        {% endfor %}
+    </div>
+
+  <div class="chat-input">
+    <input id="myMessage" autocomplete="off" placeholder="Введите сообщение..." />
+    <button onclick="send()">Отправить</button>
+  </div>
+
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script>
+    const socket = io();
+    const chatId = {{ chat.id }};
+    const currentUserId = {{ current_user_id }};
+
+    socket.on('connect', () => {
+      socket.emit('join', { chat_id: chatId });
+    });
+
+    socket.on('message', (data) => {
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('message-wrapper');
+        wrapper.classList.add(data.sender_id === currentUserId ? 'my-wrapper' : 'other-wrapper');
+
+        const senderEl = document.createElement('div');
+        senderEl.classList.add('sender-name');
+        senderEl.textContent = data.sender_id === currentUserId ? 'Вы' : data.sender_name;
+
+        const messageEl = document.createElement('div');
+        messageEl.classList.add('message');
+        messageEl.classList.add(data.sender_id === currentUserId ? 'my-message' : 'other-message');
+        messageEl.textContent = data.text;
+
+        wrapper.appendChild(senderEl);
+        wrapper.appendChild(messageEl);
+        document.getElementById('messages').appendChild(wrapper);
+        scrollToBottom();
+    });
+
+    function send() {
+        const input = document.getElementById('myMessage');
+        const text = input.value.trim();
+        if (text === '') return;
+        socket.emit('chat_message', {
+            chat_id: chatId,
+            text: text,
+            sender_id: currentUserId 
+        });
+
+
+        input.value = '';
+    }
+
+    function scrollToBottom() {
+      const container = document.getElementById('messages');
+      container.scrollTop = container.scrollHeight;
+    }
+
+    scrollToBottom();
+
+
+
+    document.getElementById("myMessage").addEventListener("keydown", function (e) {
+        if (e.key === "Enter") send();
+    });
+
+    document.getElementById("myMessage").focus();
+  </script>
+</body>
+</html>

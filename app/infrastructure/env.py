@@ -10,7 +10,7 @@ env_config = EnvConfig(
         "FLASK_RUN_HOST": str,
         "FLASK_RUN_PORT": int,
     },
-    path = ".env.dev"
+    path = ".env"
 )
 
 

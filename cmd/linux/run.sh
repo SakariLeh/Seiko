@@ -5,9 +5,9 @@ PROJECT_ROOT="$SCRIPT_DIR/../../"
 
 cd "$PROJECT_ROOT"
 
-# Подгружаем .env.dev
-export $(grep -v '^#' .env.dev | xargs)
+# Подгружаем .env
+export $(grep -v '^#' .env | xargs)
 
-source venv/bin/activate
+source .venv/bin/activate
 
-flask run
+flask run --reload

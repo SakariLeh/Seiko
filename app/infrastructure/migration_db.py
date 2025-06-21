@@ -6,6 +6,9 @@ from app.infrastructure import db
 from app.modules.product import ProductModel, ProductQuantityModel
 from app.modules.reservation import ReservationModel
 from app.modules.user import UserModel
+from app.modules.chats import ChatModel, MessageModel
+
+from datetime import datetime
 
 # types 
 from app.types import EStatus
@@ -58,14 +61,27 @@ class MigrationDB:
         user = UserModel.query.first()
         if not user:
             user = UserModel(
-                phone="123456789",
-                password="123456789",
-                role="admin",
-                name="admin",
-                company="company",
+                phone="998907654321",
+                password="5678",
+                role="support",
+                name="Ivan Petrov",
+                company="NabievOptics",
                 location="location"
             )
             db.session.add(user)
+            db.session.commit()
+        
+        user2 = UserModel.query.get(2)
+        if not user2:
+            user2 = UserModel(
+                phone="998901234567",
+                password="1234",
+                role="admin",
+                name="Adam Lumberg",
+                company="NabievOptics",
+                location="location"
+            )
+            db.session.add(user2)
             db.session.commit()
         
 
@@ -99,6 +115,35 @@ class MigrationDB:
                 company="Очки Маркет",
             )
             db.session.add_all([order1, order2, order3])
+            db.session.commit()
+        
+        # == Сообщения ===
+        if not MessageModel.query.first():
+            message = MessageModel(
+                chat_id=1,
+                sender_id=user.id,
+                text="Hello i'm Ivan Petrov"
+            )
+            db.session.add(message)
+            db.session.commit()
+        
+        if not MessageModel.query.get(2):
+            message = MessageModel(
+                chat_id=1,
+                sender_id=user2.id,
+                text="Hello i'm Adam Lumberg"
+            )
+            db.session.add(message)
+            db.session.commit()
+
+        # === Чаты ===
+        if not ChatModel.query.first():
+            chat = ChatModel(
+                user1_id=user.id,
+                user2_id=user2.id,
+                messages=[]
+            )
+            db.session.add(chat)
             db.session.commit()
 
 migrationDB = MigrationDB()

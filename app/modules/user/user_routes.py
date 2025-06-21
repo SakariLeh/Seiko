@@ -5,11 +5,11 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from app.types import ERoleUser, EMethod
 
 # services
-from .user_service import add_new_partner_service
-from .user_service import get_all_partners_service
-from .user_service import delete_partner_service
-from .user_service import get_partner_by_id_service
-from .user_service import edit_partner_service
+from .user_services import add_new_user_service
+from .user_services import get_all_users_service
+from .user_services import delete_user_service
+from .user_services import get_user_by_id_service
+from .user_services import edit_user_service
 
 # middlewares
 from app.middlewares import role_required_middleware
@@ -53,7 +53,7 @@ def add_new_partner_route():
         
         
 
-        user = add_new_partner_service(
+        user = add_new_user_service(
             phone=request.form['phone'],
             password=request.form["password"],
             role=request.form['role'],
@@ -80,7 +80,7 @@ def partner_added_successfully_route(id: int):
     Страница с успешной регистрацией
     """
 
-    user = get_partner_by_id_service(id)
+    user = get_user_by_id_service(id)
 
     return render_template(userConf.r.get_temp("Страница с успешной регистрацией"), user=user)
 
@@ -101,7 +101,7 @@ def delete_partner_route(id: int):
 
         return redirect(url_for('user.all_partners_route'))
 
-    user = get_partner_by_id_service(id)
+    user = get_user_by_id_service(id)
 
 
 
@@ -119,7 +119,7 @@ def all_partners_route():
     Получение всех клиентов
     """
 
-    users = get_all_partners_service()
+    users = get_all_users_service()
     return render_template(userConf.r.get_temp("Получение всех партнёра"), users=users, ERoleUser=ERoleUser)
 
 
@@ -135,11 +135,11 @@ def edit_partner_route(id: int):
 
     if request.method == EMethod.POST:
         
-        user = edit_partner_service(id, request.form['name'], request.form['phone'], request.form['role'], request.form['company'], request.form['location'])
+        user = edit_user_service(id, request.form['name'], request.form['phone'], request.form['role'], request.form['company'], request.form['location'])
         
         return redirect(url_for('user.partner_added_successfully_route', id=user.id))
 
-    user = get_partner_by_id_service(id)
+    user = get_user_by_id_service(id)
    
 
     return render_template(userConf.r.get_temp("Изменения партнёра"), user=user, ERoleUser=ERoleUser)

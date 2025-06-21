@@ -7,6 +7,9 @@ from app.models.warehouse import Reservation, get_warehouse_products
 # from app.routes.warehouse import warehouse_bp
 from app.modules.warehouse import warehouse_bp
 
+
+from app.types import ESessionUser
+
 dashboard_bp = Blueprint('dashboard', __name__)
 
 
@@ -55,27 +58,36 @@ def login_required(view_func):
 @dashboard_bp.route('/dashboard')
 @login_required
 def index():
-    role = session.get('role') 
+    # role = session.get('role') 
+
+    # print(session)
+
+    # # Получаем данные пользователя в зависимости от роли
+    # user_data = get_user_data(session.get('user_id'))
 
 
-    # Получаем данные пользователя в зависимости от роли
-    user_data = get_user_data(session.get('user_id'))
 
-    # Недавние заказы для демонстрации
-    recent_orders = get_recent_orders(session.get('user_id'), role)
+    # # Определяем заголовок роли для отображения на странице
+    # role_title = get_role_title(role)
 
-    # Определяем заголовок роли для отображения на странице
-    role_title = get_role_title(role)
+    phone = session.get(ESessionUser.PHONE)
+    role = session.get(ESessionUser.ROLE)
+    name = session.get(ESessionUser.NAME)
+    company = session.get(ESessionUser.COMPANY)
+    location = session.get(ESessionUser.LOCATION)
 
-    print(session)
+
+    # # Недавние заказы для демонстрации
+    recent_orders = get_recent_orders(session.get(ESessionUser.USER_ID), role)
+
 
     return render_template(
         'owner_main_page.html',
         role=role,
-        role_title=role_title,
-        user_name=user_data['name'],
-        company_name=user_data['company'],
-        location=user_data.get('location', ''),
+        role_title=role,
+        user_name=name,
+        company_name=company,
+        location=location,
         recent_orders=recent_orders
     )
 
@@ -110,11 +122,11 @@ def reservations():
     )
 
 
-@dashboard_bp.route('/communication')
-@login_required
-def communication():
-    # Перенаправляем на новый маршрут чатов
-    return redirect(url_for('chat.index'))
+# @dashboard_bp.route('/communication')
+# @login_required
+# def communication():
+#     # Перенаправляем на новый маршрут чатов
+#     return redirect(url_for('chat.index'))
 
 
 # @dashboard_bp.route('/news')

@@ -29,10 +29,7 @@ auth_bp = Blueprint('auth', __name__)
 )
 def auth_route():
 
-    from app.modules.product import get_all_products_fetch, get_product_by_id_fetch
-
-    get_all_products_fetch()
-    get_product_by_id_fetch(product_id = 2)
+    
 
     if is_signed_in_service():
         return redirect(url_for('dashboard.index'))
@@ -80,6 +77,7 @@ def login_password_route():
         )
     
     user = login_service(phone, password)
+    print(user)
 
     if not user:
         return render_template(

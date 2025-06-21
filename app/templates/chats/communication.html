@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Мои чаты</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    .chat-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .chat-item {
+      background: #fff;
+      padding: 15px 20px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+      transition: background 0.2s;
+    }
+
+    .chat-item:hover {
+      background: #e6f2ff;
+    }
+
+    .chat-link {
+      text-decoration: none;
+      color: #333;
+      display: block;
+    }
+
+    .chat-name {
+      font-weight: bold;
+    }
+
+    .chat-preview {
+      font-size: 14px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <h2>Мои чаты</h2>
+  <ul class="chat-list">
+    {% for chat in chats %}
+      <li class="chat-item">
+        <a class="chat-link" href="{{ url_for('chats.single_chat', chat_id=chat.id) }}">
+          <div class="chat-name">
+            Переписка с: 
+            {% if chat.user1_id == current_user_id %}
+              {{ chat.user2_name }}
+            {% else %}
+              {{ chat.user1_name }}
+            {% endif %}
+          </div>
+          {% if chat.last_message %}
+            <div class="chat-preview">
+              {{ chat.last_message.text[:40] }}{% if chat.last_message.text|length > 40 %}...{% endif %}
+            </div>
+          {% endif %}
+        </a>
+      </li>
+    {% else %}
+      <p>У вас пока нет чатов.</p>
+    {% endfor %}
+  </ul>
+</body>
+</html>

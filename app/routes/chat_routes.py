@@ -3,7 +3,7 @@ from datetime import datetime
 
 from functools import wraps
 
-chat_bp = Blueprint('chat', __name__)
+chat_bp = Blueprint('chat22', __name__)
 
 
 # Функция-декоратор для проверки авторизации
