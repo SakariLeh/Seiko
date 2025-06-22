@@ -13,6 +13,8 @@ from datetime import datetime
 # types 
 from app.types import EStatus
 
+from werkzeug.security import generate_password_hash
+
 
 class UserData:
     """
@@ -24,7 +26,7 @@ class UserData:
         if not user:
             user = UserModel(
                 phone="998907654321",
-                password="5678",
+                password=generate_password_hash("5678"),
                 role="support",
                 name="Ivan Petrov",
                 company="NabievOptics",
@@ -37,7 +39,7 @@ class UserData:
         if not user2:
             user2 = UserModel(
                 phone="998901234567",
-                password="1234",
+                password=generate_password_hash("1234"),
                 role="admin",
                 name="Adam Lumberg",
                 company="NabievOptics",
@@ -50,7 +52,7 @@ class UserData:
         if not user3:
             user3 = UserModel(
                 phone="998903216547",
-                password="5555",
+                password=generate_password_hash("5555"),
                 role="store",
                 name="Adam Lumberg",
                 company="NabievOptics",
@@ -63,7 +65,7 @@ class UserData:
         if not user4:
             user4 = UserModel(
                 phone="998903456789",
-                password="9876",
+                password=generate_password_hash("9876"),
                 role="branch",
                 name="Sergey Sidorov",
                 company="Оптика+",

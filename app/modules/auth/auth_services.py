@@ -22,22 +22,32 @@ def is_signed_in_service() -> bool:
 
 
 
-def login_service(phone: str, password: str) -> UserModel | None:
-    # Аутентификация пользователя
-    user = AuthModel.authenticate(phone, password)
+# def login_service(phone: str, password: str) -> UserModel | None:
+#     # Аутентификация пользователя
+#     user = AuthModel.authenticate(phone, password)
 
-    if not user:
-        return None
+#     if not user:
+#         return None
 
     
 
-    session[ESessionUser.USER_ID] = user.id
-    session[ESessionUser.ROLE] = user.role
-    session[ESessionUser.NAME] = user.name
-    session[ESessionUser.COMPANY] = user.company
-    session[ESessionUser.LOCATION] = user.location
+#     session[ESessionUser.USER_ID] = user.id
+#     session[ESessionUser.ROLE] = user.role
+#     session[ESessionUser.NAME] = user.name
+#     session[ESessionUser.COMPANY] = user.company
+#     session[ESessionUser.LOCATION] = user.location
 
-    return user
+#     return user
+
+
+from werkzeug.security import check_password_hash
+
+
+def login_service(phone: str, password: str) -> UserModel | None:
+    user = UserModel.query.filter_by(phone=phone).first()
+    if user and check_password_hash(user.password, password):
+        return user
+    return None
 
 def logout_service() -> None:
     session.clear()

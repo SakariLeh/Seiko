@@ -118,6 +118,19 @@ def search_user_by_phone():
     phone = request.form.get("phone")
     found_user = UserModel.query.filter_by(phone=phone).first()
     user_id = session.get(ESessionUser.USER_ID)
+    
+    if not found_user:
+        return render_template(
+            chatsConf.r.get_temp("Отображение чатов"),
+            chats=get_chats_service(user_id),
+            current_user_id=user_id,
+            found_user=None,
+            searched=True
+        )
+
+    if found_user.id == session.get(ESessionUser.USER_ID):
+        found_user = None
+
     return render_template(
         chatsConf.r.get_temp("Отображение чатов"),
         chats=get_chats_service(user_id),

@@ -3,58 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title>Мои чаты</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #f4f4f4;
-    }
-
-    h2 {
-      margin-bottom: 20px;
-    }
-
-    .chat-list {
-      list-style: none;
-      padding: 0;
-    }
-
-    .chat-item {
-      background: #fff;
-      padding: 15px 20px;
-      margin-bottom: 10px;
-      border-radius: 10px;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-      transition: background 0.2s;
-    }
-
-    .chat-item:hover {
-      background: #e6f2ff;
-    }
-
-    .chat-link {
-      text-decoration: none;
-      color: #333;
-      display: block;
-    }
-
-    .chat-name {
-      font-weight: bold;
-    }
-
-    .chat-preview {
-      font-size: 14px;
-      color: #777;
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/chats/communication.css') }}">
 </head>
 <body>
+  <!-- Форма поиска пользователя для начала чата -->
   <form method="POST" action="{{ url_for('chats.search_user_by_phone') }}">
     <input type="text" name="phone" placeholder="Введите номер телефона" required />
-    <button type="submit">Найти</button>
+    <button type="submit">Найти человека для переписки по номеру телефона</button>
   </form>
   
+  <!-- Результаты поиска пользователя -->
   {% if found_user %}
     <p>Найден: {{ found_user.name }} ({{ found_user.phone }})</p>
     <form method="POST" action="{{ url_for('chats.start_chat_with_user') }}">
@@ -64,8 +22,8 @@
   {% elif not found_user and searched %}
     <p>Пользователь не найден.</p>
   {% endif %}
-
-
+  
+  <!-- Список чатов -->
   <h2>Мои чаты</h2>
   <ul class="chat-list">
     {% for chat in chats %}
@@ -90,5 +48,12 @@
       <p>У вас пока нет чатов.</p>
     {% endfor %}
   </ul>
+
+
+  <!-- Кнопка для добавления нового пользователя -->
+  <div>
+    <a href="{{ url_for('user.add_new_user_router') }}" class="add-user-button">Добавить пользователя</a>
+  </div>
+
 </body>
 </html>

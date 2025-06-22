@@ -11,11 +11,11 @@
 
 <body>
     <header>
-        <a href="{{ url_for('user.all_partners_route') }}"><i class="bi bi-arrow-left"></i></a>
+        <a href="{{ url_for('chats.communication_route') }}"><i class="bi bi-arrow-left"></i></a>
         <h1>Добавить партнера</h1>
     </header>
     <div class="container">
-        <form class="employee-form" action = "{{ url_for('user.add_new_partner_route') }}" method='post'>
+        <form class="employee-form" action = "{{ url_for('user.add_new_user_router') }}" method='post'>
             {% if error %}
                 <p class="error">{{ error }}</p>
             {% endif %}

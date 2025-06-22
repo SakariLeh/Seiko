@@ -26,7 +26,8 @@ class AuthModuleConfig(ModuleConfig):
             is_logging=is_logging
         )
 
-
+# 998901234567, 1234 - user1
+# 998907654321, 4321 - user2 
 
 routers = {
     "Проверка авторизации пользователя": TRouter(

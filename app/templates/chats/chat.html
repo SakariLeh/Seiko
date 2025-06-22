@@ -3,278 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <title>Чат</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f2f2f2;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
-
-    .chat-container {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .message {
-      max-width: 60%;
-      padding: 10px 15px;
-      margin: 5px 0;
-      border-radius: 15px;
-      word-break: break-word;
-    }
-
-    .my-message {
-      align-self: flex-end;
-      background-color: #daf8cb;
-    }
-
-    .other-message {
-      align-self: flex-start;
-      background-color: #ffffff;
-    }
-
-    .chat-input {
-      display: flex;
-      padding: 10px;
-      background: #fff;
-      border-top: 1px solid #ccc;
-    }
-
-    #myMessage {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    button {
-      margin-left: 10px;
-      padding: 10px 15px;
-      border: none;
-      background: #28a745;
-      color: #fff;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #218838;
-    }
-
-
-    .message-wrapper {
-        display: flex;
-        flex-direction: column;
-        margin: 10px 0;
-        max-width: 70%;
-        }
-
-        .my-wrapper {
-        align-self: flex-end;
-        text-align: right;
-        }
-
-        .other-wrapper {
-        align-self: flex-start;
-        text-align: left;
-        }
-
-        .sender-name {
-        font-size: 13px;
-        color: #888;
-        margin-bottom: 3px;
-        font-weight: 600;
-        }
-
-
-        .delete-btn {
-          background: none;
-          border: none;
-          color: #c00;
-          margin-left: 10px;
-          cursor: pointer;
-          font-size: 14px;
-        }
-
-        .delete-btn:hover {
-          text-decoration: underline;
-        }
-
-        .copy-btn {
-          background: none;
-          border: none;
-          color: #555;
-          margin-left: 5px;
-          cursor: pointer;
-          font-size: 14px;
-        }
-
-        .copy-btn:hover {
-          color: #000;
-        }
-
-        .message-text {
-          display: inline;
-        }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/chats/chat.css') }}">
 </head>
 <body>
-    <div class="chat-container" id="messages">
-        {% for message in messages %}
-            <div class="message-wrapper {{ 'my-wrapper' if message.sender_id == current_user_id else 'other-wrapper' }}">
-              <div class="sender-name">
-                  ID: {{ message.sender_id }}
+  <div class="chat-container" id="messages">
 
-                  {% if message.sender_id != current_user_id %}
-                      Вы
-                  {% else %}
-                      {{ get_user_name_service(message.sender_id) }}
-                  {% endif %}
-              </div>
-              <!-- <div class="message {{ 'my-message' if message.sender_id == current_user_id else 'other-message' }}">
-                  {{ message.text }}
-              </div> -->
-              <div class="message {{ 'my-message' if message.sender_id == current_user_id else 'other-message' }}"
-                  data-message-id="{{ message.id }}">
-                <span class="message-text">{{ message.text }}</span>
-                <button class="copy-btn" onclick="copyMessage(this)">📋</button>
-                {% if message.sender_id == current_user_id %}
-                  <button class="delete-btn" onclick="deleteMessage({{ message.id }})">✖</button>
-                {% endif %}
-                
-              </div>
-         
-            </div>
-        {% endfor %}
-    </div>
+    <!-- Вывод сообщений определённого чата -->
+    <!-- P.S все стили в static/css/chats/chat.css можешь их хоть все поменять -->
+    {% for message in messages %}
+      <div class="message-wrapper {{ 'my-wrapper' if message.sender_id == current_user_id else 'other-wrapper' }}">
+        <div class="sender-name">
+          ID: {{ message.sender_id }}
+          {% if message.sender_id != current_user_id %}
+              Вы
+          {% else %}
+              {{ get_user_name_service(message.sender_id) }}
+          {% endif %}
+        </div>
+        <div class="message {{ 'my-message' if message.sender_id == current_user_id else 'other-message' }}"
+            data-message-id="{{ message.id }}">
+          <span class="message-text">{{ message.text }}</span>
+          <!-- Кнопка для копирования текста -->
+          <button class="copy-btn" onclick="copyMessage(this)">📋</button> 
 
+          <!-- Кнопка для удаления сообщения -->
+          {% if message.sender_id == current_user_id %}
+            <button class="delete-btn" onclick="deleteMessage({{ message.id }})">✖</button>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Форма отправки сообщений -->
   <div class="chat-input">
     <input id="myMessage" autocomplete="off" placeholder="Введите сообщение..." />
     <button onclick="send()">Отправить</button>
   </div>
 
+
+  <!-- Скрипты чтобы всё работало -->
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
   <script>
-    const socket = io();
     const chatId = {{ chat.id }};
     const currentUserId = {{ current_user_id }};
-
-    socket.on('connect', () => {
-      socket.emit('join', { chat_id: chatId });
-    });
-
-    socket.on('message', (data) => {
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('message-wrapper');
-        wrapper.classList.add(data.sender_id === currentUserId ? 'my-wrapper' : 'other-wrapper');
-
-        const senderEl = document.createElement('div');
-        senderEl.classList.add('sender-name');
-        senderEl.textContent = data.sender_id === currentUserId ? 'Вы' : data.sender_name;
-
-        const messageEl = document.createElement('div');
-        messageEl.classList.add('message');
-        messageEl.classList.add(data.sender_id === currentUserId ? 'my-message' : 'other-message');
-        messageEl.textContent = data.text;
-
-        wrapper.appendChild(senderEl);
-        wrapper.appendChild(messageEl);
-        document.getElementById('messages').appendChild(wrapper);
-        scrollToBottom();
-    });
-
-    function send() {
-        const input = document.getElementById('myMessage');
-        const text = input.value.trim();
-        if (text === '') return;
-        socket.emit('chat_message', {
-            chat_id: chatId,
-            text: text,
-            sender_id: currentUserId 
-        });
-
-
-        input.value = '';
-    }
-
-    function scrollToBottom() {
-      const container = document.getElementById('messages');
-      container.scrollTop = container.scrollHeight;
-    }
-
-    scrollToBottom();
-
-
-
-    document.getElementById("myMessage").addEventListener("keydown", function (e) {
-        if (e.key === "Enter") send();
-    });
-
-    document.getElementById("myMessage").focus();
-
-
-
-
-    socket.on('message_deleted', (data) => {
-      const msgEl = document.querySelector(`[data-message-id="${data.message_id}"]`);
-      if (msgEl) {
-        msgEl.innerText = '[сообщение удалено]';
-        msgEl.style.fontStyle = 'italic';
-        msgEl.style.color = '#888';
-      }
-    });
-
-
-    document.getElementById('messages').addEventListener('contextmenu', function (e) {
-      e.preventDefault();
-      const messageEl = e.target.closest('.message');
-      if (!messageEl) return;
-
-      const messageId = messageEl.dataset.messageId;
-      if (!messageId) return;
-
-      const confirmDelete = confirm('Удалить сообщение?');
-      if (!confirmDelete) return;
-
-      socket.emit('delete_message', {
-        message_id: parseInt(messageId),
-        chat_id: chatId,
-        user_id: currentUserId
-      });
-    });
-
-
-
-    function deleteMessage(messageId) {
-      if (confirm('Удалить сообщение?')) {
-        socket.emit('delete_message', {
-          message_id: messageId,
-          chat_id: chatId,
-          user_id: currentUserId
-        });
-      }
-    }
-
-
-    function copyMessage(btn) {
-      const msgText = btn.parentElement.querySelector('.message-text').innerText;
-      navigator.clipboard.writeText(msgText).then(() => {
-        btn.innerText = '✔️';
-        setTimeout(() => {
-          btn.innerText = '📋';
-        }, 1000);
-      });
-    }
-
-
-
   </script>
+  <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
 </body>
 </html>
