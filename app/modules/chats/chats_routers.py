@@ -7,8 +7,8 @@ from flask import Blueprint, render_template
 
 from app.modules.chats.chats_config import chatsConf
 
-from .chats_services import get_chats_service, find_by_id_chat_service
-from .chats_services import save_message_at_chat_service
+from .chats_services import get_chats_service, find_by_id_chat_service, get_or_create_chat
+from .chats_services import save_message_at_chat_service, delete_message_service
 
 from app.modules.user import get_user_name_service
 
@@ -37,7 +37,9 @@ def communication_route():
     return render_template(
         chatsConf.r.get_temp("Отображение чатов"), 
         chats=chat_data,
-        current_user_id=user_id  
+        current_user_id=user_id,
+        found_user=None,
+        searched=False
     )
 
 @chat_bp.route(
@@ -90,8 +92,48 @@ def handle_chat_message(data):
     }, to=str(chat_id))
 
 
+@socketio.on('delete_message')
+def handle_delete_message(data):
+    message_id = data['message_id']
+    chat_id = data['chat_id']
+    user_id = data['user_id']
+
+    delete_message_service(message_id)
+
+    socketio.emit('message_deleted', {
+        'message_id': message_id,
+    }, to=str(chat_id))
 
     
+
+
+
+
+
+from flask import request, redirect, url_for
+
+@chat_bp.route("/chats/search", methods=["POST"])
+def search_user_by_phone():
+    from app.modules.user import UserModel
+    phone = request.form.get("phone")
+    found_user = UserModel.query.filter_by(phone=phone).first()
+    user_id = session.get(ESessionUser.USER_ID)
+    return render_template(
+        chatsConf.r.get_temp("Отображение чатов"),
+        chats=get_chats_service(user_id),
+        current_user_id=user_id,
+        found_user=found_user,
+        searched=True
+    )
+
+
+@chat_bp.route("/chats/start", methods=["POST"])
+def start_chat_with_user():
+    other_user_id = int(request.form.get("user_id"))
+    current_user_id = session.get(ESessionUser.USER_ID)
+    chat = get_or_create_chat(current_user_id, other_user_id)
+    return redirect(url_for("chats.single_chat", chat_id=chat.id))
+
 
 
 

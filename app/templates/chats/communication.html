@@ -50,6 +50,22 @@
   </style>
 </head>
 <body>
+  <form method="POST" action="{{ url_for('chats.search_user_by_phone') }}">
+    <input type="text" name="phone" placeholder="Введите номер телефона" required />
+    <button type="submit">Найти</button>
+  </form>
+  
+  {% if found_user %}
+    <p>Найден: {{ found_user.name }} ({{ found_user.phone }})</p>
+    <form method="POST" action="{{ url_for('chats.start_chat_with_user') }}">
+      <input type="hidden" name="user_id" value="{{ found_user.id }}">
+      <button type="submit">Начать чат</button>
+    </form>
+  {% elif not found_user and searched %}
+    <p>Пользователь не найден.</p>
+  {% endif %}
+
+
   <h2>Мои чаты</h2>
   <ul class="chat-list">
     {% for chat in chats %}

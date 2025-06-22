@@ -10,4 +10,4 @@ export $(grep -v '^#' .env | xargs)
 
 source .venv/bin/activate
 
-flask run --reload
+flask run --reload 

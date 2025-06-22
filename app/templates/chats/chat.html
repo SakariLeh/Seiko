@@ -92,24 +92,65 @@
         margin-bottom: 3px;
         font-weight: 600;
         }
+
+
+        .delete-btn {
+          background: none;
+          border: none;
+          color: #c00;
+          margin-left: 10px;
+          cursor: pointer;
+          font-size: 14px;
+        }
+
+        .delete-btn:hover {
+          text-decoration: underline;
+        }
+
+        .copy-btn {
+          background: none;
+          border: none;
+          color: #555;
+          margin-left: 5px;
+          cursor: pointer;
+          font-size: 14px;
+        }
+
+        .copy-btn:hover {
+          color: #000;
+        }
+
+        .message-text {
+          display: inline;
+        }
   </style>
 </head>
 <body>
     <div class="chat-container" id="messages">
         {% for message in messages %}
             <div class="message-wrapper {{ 'my-wrapper' if message.sender_id == current_user_id else 'other-wrapper' }}">
-            <div class="sender-name">
-                ID: {{ message.sender_id }}
+              <div class="sender-name">
+                  ID: {{ message.sender_id }}
 
+                  {% if message.sender_id != current_user_id %}
+                      Вы
+                  {% else %}
+                      {{ get_user_name_service(message.sender_id) }}
+                  {% endif %}
+              </div>
+              <!-- <div class="message {{ 'my-message' if message.sender_id == current_user_id else 'other-message' }}">
+                  {{ message.text }}
+              </div> -->
+              <div class="message {{ 'my-message' if message.sender_id == current_user_id else 'other-message' }}"
+                  data-message-id="{{ message.id }}">
+                <span class="message-text">{{ message.text }}</span>
+                <button class="copy-btn" onclick="copyMessage(this)">📋</button>
                 {% if message.sender_id == current_user_id %}
-                    Вы
-                {% else %}
-                    {{ get_user_name_service(message.sender_id) }}
+                  <button class="delete-btn" onclick="deleteMessage({{ message.id }})">✖</button>
                 {% endif %}
-            </div>
-            <div class="message {{ 'my-message' if message.sender_id == current_user_id else 'other-message' }}">
-                {{ message.text }}
-            </div>
+                
+              </div>
+         
             </div>
         {% endfor %}
     </div>
@@ -177,6 +218,63 @@
     });
 
     document.getElementById("myMessage").focus();
+
+
+
+
+    socket.on('message_deleted', (data) => {
+      const msgEl = document.querySelector(`[data-message-id="${data.message_id}"]`);
+      if (msgEl) {
+        msgEl.innerText = '[сообщение удалено]';
+        msgEl.style.fontStyle = 'italic';
+        msgEl.style.color = '#888';
+      }
+    });
+
+
+    document.getElementById('messages').addEventListener('contextmenu', function (e) {
+      e.preventDefault();
+      const messageEl = e.target.closest('.message');
+      if (!messageEl) return;
+
+      const messageId = messageEl.dataset.messageId;
+      if (!messageId) return;
+
+      const confirmDelete = confirm('Удалить сообщение?');
+      if (!confirmDelete) return;
+
+      socket.emit('delete_message', {
+        message_id: parseInt(messageId),
+        chat_id: chatId,
+        user_id: currentUserId
+      });
+    });
+
+
+
+    function deleteMessage(messageId) {
+      if (confirm('Удалить сообщение?')) {
+        socket.emit('delete_message', {
+          message_id: messageId,
+          chat_id: chatId,
+          user_id: currentUserId
+        });
+      }
+    }
+
+
+    function copyMessage(btn) {
+      const msgText = btn.parentElement.querySelector('.message-text').innerText;
+      navigator.clipboard.writeText(msgText).then(() => {
+        btn.innerText = '✔️';
+        setTimeout(() => {
+          btn.innerText = '📋';
+        }, 1000);
+      });
+    }
+
+
+
   </script>
 </body>
 </html>

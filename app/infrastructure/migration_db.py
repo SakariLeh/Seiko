@@ -14,13 +14,67 @@ from datetime import datetime
 from app.types import EStatus
 
 
-class MigrationDB:
-    def __init__(self):
-        pass
-    
+class UserData:
+    """
+    Класс для инициализации таблицы users базы данных
+    """
 
-    def init_table_data(self):
-        # === Продукты ===
+    def __init__(self):
+        user = UserModel.query.first()
+        if not user:
+            user = UserModel(
+                phone="998907654321",
+                password="5678",
+                role="support",
+                name="Ivan Petrov",
+                company="NabievOptics",
+                location="location"
+            )
+            db.session.add(user)
+            db.session.commit()
+        
+        user2 = UserModel.query.get(2)
+        if not user2:
+            user2 = UserModel(
+                phone="998901234567",
+                password="1234",
+                role="admin",
+                name="Adam Lumberg",
+                company="NabievOptics",
+                location="location"
+            )
+            db.session.add(user2)
+            db.session.commit()
+
+        user3 = UserModel.query.get(3)
+        if not user3:
+            user3 = UserModel(
+                phone="998903216547",
+                password="5555",
+                role="store",
+                name="Adam Lumberg",
+                company="NabievOptics",
+                location="location"
+            )
+            db.session.add(user3)
+            db.session.commit()
+        
+        user4 = UserModel.query.get(4)
+        if not user4:
+            user4 = UserModel(
+                phone="998903456789",
+                password="9876",
+                role="branch",
+                name="Sergey Sidorov",
+                company="Оптика+",
+                location="ТЦ Галерея"
+            )
+            db.session.add(user4)
+            db.session.commit()
+
+
+class ProductData:
+    def __init__(self):
         if not ProductModel.query.first():
             product1 = ProductModel(
                 name="Товар 1",
@@ -57,35 +111,47 @@ class MigrationDB:
             db.session.add_all([quantity1, quantity2, quantity3])
             db.session.commit()
 
-        # === Пользователи ===
-        user = UserModel.query.first()
-        if not user:
-            user = UserModel(
-                phone="998907654321",
-                password="5678",
-                role="support",
-                name="Ivan Petrov",
-                company="NabievOptics",
-                location="location"
-            )
-            db.session.add(user)
-            db.session.commit()
-        
-        user2 = UserModel.query.get(2)
-        if not user2:
-            user2 = UserModel(
-                phone="998901234567",
-                password="1234",
-                role="admin",
-                name="Adam Lumberg",
-                company="NabievOptics",
-                location="location"
-            )
-            db.session.add(user2)
-            db.session.commit()
-        
 
-        # === Бронирование (WarehouseOrder) ===
+class ChatData:
+    def __init__(self):
+        user = UserModel.query.first()
+        user2 = UserModel.query.get(2)
+
+        if not ChatModel.query.first():
+            chat1 = ChatModel(user1_id=user.id, user2_id=user2.id)
+            
+            db.session.add_all([chat1])
+            db.session.commit()
+
+class MessageData:
+    def __init__(self):
+        user = UserModel.query.first()
+        user2 = UserModel.query.get(2)
+
+        if not MessageModel.query.first():
+            message = MessageModel(
+                chat_id=1,
+                sender_id=user.id,
+                text="Hello i'm Ivan Petrov"
+            )
+            db.session.add(message)
+            db.session.commit()
+        
+        if not MessageModel.query.get(2):
+            message = MessageModel(
+                chat_id=1,
+                sender_id=user2.id,
+                text="Hello i'm Adam Lumberg"
+            )
+            db.session.add(message)
+            db.session.commit()
+
+
+class ReservationData:
+    def __init__(self):
+        user = UserModel.query.first()
+
+
         if not ReservationModel.query.first():
             product = ProductModel.query.first()
 
@@ -116,34 +182,39 @@ class MigrationDB:
             )
             db.session.add_all([order1, order2, order3])
             db.session.commit()
-        
-        # == Сообщения ===
-        if not MessageModel.query.first():
-            message = MessageModel(
-                chat_id=1,
-                sender_id=user.id,
-                text="Hello i'm Ivan Petrov"
-            )
-            db.session.add(message)
-            db.session.commit()
-        
-        if not MessageModel.query.get(2):
-            message = MessageModel(
-                chat_id=1,
-                sender_id=user2.id,
-                text="Hello i'm Adam Lumberg"
-            )
-            db.session.add(message)
-            db.session.commit()
+
+class MigrationDB:
+    def __init__(self):
+        pass
+    
+
+    def init_table_data(self):
+        # === Продукты ===
+        ProductData()
+
+        # === Пользователи ===
+        UserData()
 
         # === Чаты ===
-        if not ChatModel.query.first():
-            chat = ChatModel(
-                user1_id=user.id,
-                user2_id=user2.id,
-                messages=[]
-            )
-            db.session.add(chat)
-            db.session.commit()
+
+        ChatData()
+
+        # === Бронирование (WarehouseOrder) ===
+
+        ReservationData()
+        
+        # == Сообщения ===
+
+        MessageData()
+
+        # # === Чаты ===
+        # if not ChatModel.query.first():
+        #     chat = ChatModel(
+        #         user1_id=user.id,
+        #         user2_id=user2.id,
+        #         messages=[]
+        #     )
+        #     db.session.add(chat)
+        #     db.session.commit()
 
 migrationDB = MigrationDB()

@@ -75,6 +75,8 @@ def find_by_id_chat_service(chat_id: int) -> Tuple[ChatModel, List[MessageModel]
     return (chat, messages)
 
 
+# ------
+
 def save_message_at_chat_service(chat_id: int, sender_id: int, text: str) -> MessageModel:
     """
     Сохранение сообщения в чат
@@ -85,3 +87,10 @@ def save_message_at_chat_service(chat_id: int, sender_id: int, text: str) -> Mes
     db.session.add(msg)
     db.session.commit()
     return msg
+
+
+
+def delete_message_service(message_id: int):
+    msg = MessageModel.query.get_or_404(message_id)
+    db.session.delete(msg)
+    db.session.commit()
