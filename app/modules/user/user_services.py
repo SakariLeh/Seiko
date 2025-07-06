@@ -5,7 +5,7 @@ from .user_model import UserModel
 # types 
 from typing import List
 
-
+from app.infrastructure import db
 
 
 
@@ -29,7 +29,8 @@ def add_new_user_service(
         location=location
     )  
 
-    new_user.save()
+    db.session.add(new_user)
+    db.session.commit()
 
     return new_user
 
@@ -48,7 +49,8 @@ def delete_user_service(id: int) -> UserModel | None:
     if not deleted_user:
         return None
 
-    deleted_user.delete()
+    db.session.delete(deleted_user)
+    db.session.commit()
 
     return deleted_user
     
@@ -87,6 +89,6 @@ def edit_user_service(id: int, name: str, phone: str, role: str, company: str, l
     user.company = company
     user.location = location
 
-    user.save()
+    db.session.commit()
 
     return user 

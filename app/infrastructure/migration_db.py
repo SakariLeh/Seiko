@@ -108,7 +108,7 @@ class ProductData:
        
             # === Количество ===
             quantity1 = ProductQuantityModel(product_id=product1.id, quantity=10, is_available=True)
-            quantity2 = ProductQuantityModel(product_id=product2.id, quantity=20, is_available=False)
+            quantity2 = ProductQuantityModel(product_id=product2.id, quantity=20, is_available=True)
             quantity3 = ProductQuantityModel(product_id=product3.id, quantity=50, is_available=True)
             db.session.add_all([quantity1, quantity2, quantity3])
             db.session.commit()
@@ -209,14 +209,6 @@ class MigrationDB:
 
         MessageData()
 
-        # # === Чаты ===
-        # if not ChatModel.query.first():
-        #     chat = ChatModel(
-        #         user1_id=user.id,
-        #         user2_id=user2.id,
-        #         messages=[]
-        #     )
-        #     db.session.add(chat)
-        #     db.session.commit()
+       
 
 migrationDB = MigrationDB()

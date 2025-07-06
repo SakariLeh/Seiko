@@ -27,7 +27,6 @@ reservation_bp = Blueprint('reservation', __name__)
     reservationConf.r.get_path("Бронирование товара"),
     methods=reservationConf.r.get_methods("Бронирование товара")
 )
-
 @role_required_middleware([ERoleUser.ADMIN, ERoleUser.SUPPORT])
 def reserve_product_route():
     """

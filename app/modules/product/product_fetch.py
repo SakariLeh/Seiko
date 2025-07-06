@@ -106,6 +106,6 @@ def get_all_quantity_products_fetch() -> list[ProductQuantityModel] | list:
         print(f"Ошибка при получении всех записей таблицы(products): {e}")
         return []
     
-    print(products_quantity)
+   
 
     return products_quantity

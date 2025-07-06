@@ -29,7 +29,7 @@ auth_bp = Blueprint('auth', __name__)
     methods = authConf.r.get_methods("Проверка авторизации пользователя") 
 )
 def auth_route():
-
+    session.clear()
     
 
     if is_signed_in_service():
@@ -38,48 +38,57 @@ def auth_route():
 
 
 
+
+
 # @auth_bp.route(
 #     authConf.r.get_path("Вход в систему(номер телефона)"), 
-#     methods = authConf.r.get_methods("Вход в систему(номер телефона)") 
+#     methods=authConf.r.get_methods("Вход в систему(номер телефона)") 
 # )
 # def login_phone_route():
 #     phone = request.form.get('phone', '').strip()
-
-#     # Удаляем возможные пробелы, скобки, дефисы и плюсы
 #     phone = phone.replace(' ', '').replace('(', '').replace(')', '').replace('-', '').replace('+', '')
 
 #     if not validate_phone(phone):
 #         return render_template(
-#             'index.html', 
-#             error='Введите корректный номер телефона в формате 998XXXXXXXXX',              
+#             authConf.r.get_temp("Проверка авторизации пользователя"),
+#             error='Введите корректный номер телефона в формате 998XXXXXXXXX',
 #             phone=phone
 #         )
 
-
+#     session['auth_phone'] = phone  # ✅ сохраняем временно номер телефона
 #     return render_template(
 #         authConf.r.get_temp("Вход в систему(номер телефона)"),
 #         phone=phone
 #     )
 
-@auth_bp.route(
-    authConf.r.get_path("Вход в систему(номер телефона)"), 
-    methods=authConf.r.get_methods("Вход в систему(номер телефона)") 
-)
-def login_phone_route():
-    phone = request.form.get('phone', '').strip()
-    phone = phone.replace(' ', '').replace('(', '').replace(')', '').replace('-', '').replace('+', '')
 
-    if not validate_phone(phone):
+@auth_bp.route(authConf.r.get_path("Вход в систему(номер телефона)"), 
+               methods=authConf.r.get_methods("Вход в систему(номер телефона)"))
+def login_phone_route():
+    
+    TEMPLATE_NAME = authConf.r.get_temp("Проверка авторизации пользователя")
+
+    if request.method == 'POST':
+        phone = request.form.get('phone', '').strip()
+        phone = phone.replace(' ', '').replace('(', '').replace(')', '').replace('-', '').replace('+', '')
+
+        if not validate_phone(phone):
+            print(request.method, request.form)
+            return render_template(
+                TEMPLATE_NAME,
+                error='Введите корректный номер телефона в формате 998XXXXXXXXX',
+                phone=phone
+            )
+
+        session['auth_phone'] = phone
         return render_template(
-            'index.html',
-            error='Введите корректный номер телефона в формате 998XXXXXXXXX',
+            authConf.r.get_temp("Вход в систему(номер телефона)"),
             phone=phone
         )
 
-    session['auth_phone'] = phone  # ✅ сохраняем временно номер телефона
+    # GET-запрос: просто отрисовать форму
     return render_template(
         authConf.r.get_temp("Вход в систему(номер телефона)"),
-        phone=phone
     )
 
 # @auth_bp.route(
@@ -126,15 +135,16 @@ def login_password_route():
 
     if not validate_password(password):
         return render_template(
-            'password.html',
+            authConf.r.get_temp("Вход в систему(пароль)"),
             error='Введите корректный 4-значный пароль',
             phone=phone
         )
 
     user = login_service(phone, password)
+    
     if not user:
         return render_template(
-            'password.html',
+            authConf.r.get_temp("Вход в систему(номер телефона)"),
             error='Неверный номер телефона или пароль',
             phone=phone
         )
@@ -149,7 +159,9 @@ def login_password_route():
 
     session.pop('auth_phone', None)  # ❌ удаляем временный номер
 
-    return redirect(url_for('dashboard.index'))  # переход к защищённой зоне
+    
+
+    return redirect(url_for(authConf.r.get_temp("Вход в систему(пароль)")))  # переход к защищённой зоне
 
 
 

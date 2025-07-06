@@ -82,7 +82,7 @@ def index():
 
 
     return render_template(
-        'owner_main_page.html',
+        'dashboard/owner_main_page.html',
         role=role,
         role_title=role,
         user_name=name,
@@ -227,11 +227,29 @@ def get_recent_orders(user_id, role):
     В демонстрационных целях возвращает тестовые данные.
     """
     # Демонстрационные заказы
-    orders = [
-        {'id': '4311', 'status_text': 'Отправлен', 'status_class': 'sent', 'customer': 'Оптика Плюс'},
-        {'id': '4299', 'status_text': 'Доставлен', 'status_class': 'delivered', 'customer': 'Линзы и очки'},
-        {'id': '4287', 'status_text': 'В обработке', 'status_class': 'processing', 'customer': 'ОчкиМаркет'}
-    ]
+
+    from app.modules.reservation import find_all_reservations
+    reservations = find_all_reservations()
+
+    orders = []
+    session.get(ESessionUser.USER_ID)
+
+    for reservation in reservations:
+        if reservation.user_id != user_id:
+            continue
+        order = {
+            'id': reservation.id,
+            'status_text': "Доставлен" if reservation.status == 'delivered' else "В обработке",
+            'status_class': reservation.status,
+            'customer': reservation.company
+        }
+        orders.append(order)
+
+    # orders = [
+    #     {'id': '4311', 'status_text': 'Отправлен', 'status_class': 'sent', 'customer': 'Оптика Плюс'},
+    #     {'id': '4299', 'status_text': 'Доставлен', 'status_class': 'delivered', 'customer': 'Линзы и очки'},
+    #     {'id': '4287', 'status_text': 'В обработке', 'status_class': 'processing', 'customer': 'ОчкиМаркет'}
+    # ]
 
     return orders
 
