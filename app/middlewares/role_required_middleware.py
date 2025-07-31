@@ -19,7 +19,7 @@ def role_required_middleware(required_roles: List[ERoleUser]):
             user_role = session.get(ESessionUser.ROLE)  # Получаем роль из сессии
             if user_role not in required_roles:
                 # Можно перенаправить на страницу с ошибкой или другую страницу
-                return redirect(url_for('dashboard.auth_route'))
+                return redirect(url_for('auth.auth_route'))
 
             return view_func(*args, **kwargs)
 

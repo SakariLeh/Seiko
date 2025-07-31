@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Чат</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/chats/chat.css') }}">
+</head>
+<body>
+  <div class="chat-container" id="messages">
+
+    <!-- Вывод сообщений определённого чата -->
+    <!-- P.S все стили в static/css/chats/chat.css можешь их хоть все поменять -->
+    {% for message in messages %}
+      <div class="message-wrapper {{ 'my-wrapper' if message.sender_id == current_user_id else 'other-wrapper' }}">
+        <div class="sender-name">
+          ID: {{ message.sender_id }}
+          {% if message.sender_id != current_user_id %}
+              Вы
+          {% else %}
+              {{ get_user_name_service(message.sender_id) }}
+          {% endif %}
+        </div>
+        <div class="message {{ 'my-message' if message.sender_id == current_user_id else 'other-message' }}"
+            data-message-id="{{ message.id }}">
+          <span class="message-text">{{ message.text }}</span>
+          <!-- Кнопка для копирования текста -->
+          <button class="copy-btn" onclick="copyMessage(this)">📋</button> 
+
+          <!-- Кнопка для удаления сообщения -->
+          {% if message.sender_id == current_user_id %}
+            <button class="delete-btn" onclick="deleteMessage({{ message.id }})">✖</button>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Форма отправки сообщений -->
+  <div class="chat-input">
+    <input id="myMessage" autocomplete="off" placeholder="Введите сообщение..." />
+    <button onclick="send()">Отправить</button>
+  </div>
+
+
+  <!-- Скрипты чтобы всё работало -->
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script>
+    const chatId = {{ chat.id }};
+    const currentUserId = {{ current_user_id }};
+  </script>
+  <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>

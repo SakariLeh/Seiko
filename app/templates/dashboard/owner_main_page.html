@@ -42,7 +42,7 @@
         </section>
 
     <nav class="menu">
-        <a href="{{ url_for('dashboard.communication') }}" class="menu-btn">
+        <a href="{{ url_for('chats.communication_route') }}" class="menu-btn">
             <img src="{{ url_for('static', filename='img/chat-icon.png') }}" alt="Коммуникация"> Коммуникация
         </a>
         <div class="menu-col">
@@ -69,7 +69,7 @@
             <a href="{{ url_for('dashboard.order_history') }}" class="menu-btn">
                 <img src="{{ url_for('static', filename='img/history-icon.png') }}" alt="История"> История заказов
             </a>
-            <a href="{{ url_for('dashboard.reservations') }}" class="menu-btn">
+            <a href="{{ url_for('reservation.reserve_product_route') }}" class="menu-btn">
                 <img src="{{ url_for('static', filename='img/reservation-icon.png') }}" alt="Бронирования"> Бронирования
             </a>
         </nav>

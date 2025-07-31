@@ -28,7 +28,7 @@ routers = {
     "Открытие дашборда": TRouter(
         path = "/dashboard",
         methods = [EMethod.GET],
-        template="owner_main_page.html"
+        template="dashboard/owner_main_page.html"
     ),
     "Перенаправление в хранилище": TRouter(
         path = "/storage",

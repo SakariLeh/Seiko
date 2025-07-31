@@ -33,9 +33,9 @@ class UserModuleConfig(ModuleConfig):
 
 routers = {
     "Добавление нового партнёра": TRouter(
-        path = "/user/add_new_partner",
+        path = "/user/add_new_user",
         methods = [EMethod.GET, EMethod.POST],
-        template = "user/add_partner_page.html"
+        template = "user/add_new_user_page.html"
     ),
     "Страница с успешной регистрацией": TRouter(
         path = "/user/partner_added_successfully/<int:id>",
